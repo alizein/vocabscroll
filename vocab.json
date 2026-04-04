@@ -1411,38 +1411,6 @@
     "audio": "googletts-029164e1-6a1b1fbe-6ad71b46-612b1dfe-1966879e.mp3"
   },
   {
-    "de": "das",
-    "en": "that",
-    "lv": "A1",
-    "type": "prep",
-    "example": "Ich nehme das da. — I’ll take that there.",
-    "audio": "googletts-097eed7c-36b8b480-575ef66b-aff84e65-c4ddabe0.mp3"
-  },
-  {
-    "de": "das",
-    "en": "the",
-    "lv": "A1",
-    "type": "prep",
-    "example": "Ich mag das Buch. — I like the book.",
-    "audio": "googletts-0779c018-cb816dc3-990d2032-05e07352-4d0a473b.mp3"
-  },
-  {
-    "de": "der",
-    "en": "the",
-    "lv": "A1",
-    "type": "prep",
-    "example": "Hier ist der Brief, den du suchst. — Here is the letter that you’re looking for.",
-    "audio": "googletts-c2824e05-08ba158a-49ddcee2-ffa239d4-8714af59.mp3"
-  },
-  {
-    "de": "die",
-    "en": "the",
-    "lv": "A1",
-    "type": "prep",
-    "example": "Die Fahrkarte bekommst du am Bahnhof. — You will get the ticket at the train station.",
-    "audio": "googletts-081ca8b7-fc9448c3-5d659b4d-050bb1ed-87e83dee.mp3"
-  },
-  {
     "de": "dich",
     "en": "you",
     "lv": "A1",
@@ -2733,7 +2701,7 @@
     "de": "gestern",
     "en": "yesterday",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Gestern war ich krank. — Yesterday I was ill.",
     "audio": "googletts-bc86108d-0816841b-bfa5cfc6-a1fad3bd-b183f791.mp3"
   },
@@ -3310,7 +3278,7 @@
     "de": "hinten",
     "en": "at/in the back",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Die Tür zum Aussteigen ist hinten. — The exit door is at the back.",
     "audio": "googletts-524c0974-4d8e4f18-4fea3e61-96996e34-13bd149a.mp3"
   },
