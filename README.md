@@ -2,7 +2,7 @@
 
 A mobile-first German ↔ English flashcard app that replaces mindless social media scrolling with vocabulary learning — one card at a time.
 
-**Live app:** `[https://<your-username>.github.io/vocabscroll](https://alizein.github.io/vocabscroll/)`
+**Live app:** `https://alizein.github.io/vocabscroll`
 
 ---
 
