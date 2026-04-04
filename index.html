@@ -126,6 +126,12 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
   font-size:.58rem;color:var(--border);letter-spacing:.04em}
 .sr-badge.due{color:#f0a050}
 
+.audio-btn{position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;
+  color:var(--muted);font-size:.9rem;line-height:1;opacity:.5;transition:opacity .15s}
+.audio-btn:hover{opacity:1}
+.audio-btn.playing{opacity:1;color:var(--accent)}
+
 .card-word{font-size:2.2rem;font-weight:300;letter-spacing:-0.02em;text-align:center;line-height:1.1}
 .card-article{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:6px;letter-spacing:.04em}
 .card-translation{font-size:2rem;font-weight:400;font-style:italic;text-align:center;color:var(--accent);line-height:1.15}
@@ -262,6 +268,7 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
       <div class="card-face card-front">
         <div class="card-hint" id="frontHint">GERMAN</div>
         <div class="card-tag"  id="cardTag"></div>
+        <button class="audio-btn" id="audioBtn" onclick="event.stopPropagation();speakCurrent()" title="Play pronunciation">♪</button>
         <div class="card-word" id="frontWord">—</div>
         <div class="card-article" id="cardArticle"></div>
         <div class="card-level-badge" id="frontLvBadge"></div>
@@ -475,6 +482,7 @@ function setLevel(lv) {
 //  CARD LOGIC
 // ═══════════════════════════════════════════════════════════════
 function loadCard() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (currentIdx>=queue.length) { showDone(); return; }
   const card=queue[currentIdx];
   isFlipped=false; answered=false;
@@ -519,6 +527,21 @@ function loadCard() {
   }
   $('cardExample').innerHTML=card.example||'';
   updateStats();
+}
+
+function speakCurrent() {
+  const card = queue[currentIdx];
+  if (!card) return;
+  const text = effectiveCardMode === 'de-en' ? (card.base || card.de) : card.en;
+  const lang  = effectiveCardMode === 'de-en' ? 'de-DE' : 'en-US';
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang;
+  const btn = $('audioBtn');
+  btn.classList.add('playing');
+  utt.onend = utt.onerror = () => btn.classList.remove('playing');
+  window.speechSynthesis.speak(utt);
 }
 
 function flipCard() {
