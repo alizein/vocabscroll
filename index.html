@@ -343,153 +343,8 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  VOCABULARY  — CEFR-tagged (A1 → C2)
-// ═══════════════════════════════════════════════════════════════
-const VOCAB = [
-  // ─ A1 NOUNS ─
-  {de:"das Haus",     en:"house",               article:"das",base:"Haus",       type:"noun",  lv:"A1",example:"<strong>Das Haus</strong> ist groß. — The house is big."},
-  {de:"der Tag",      en:"day",                 article:"der",base:"Tag",        type:"noun",  lv:"A1",example:"Guten <strong>Tag</strong>! — Good day!"},
-  {de:"das Kind",     en:"child",               article:"das",base:"Kind",       type:"noun",  lv:"A1",example:"<strong>Das Kind</strong> spielt. — The child plays."},
-  {de:"das Wasser",   en:"water",               article:"das",base:"Wasser",     type:"noun",  lv:"A1",example:"Kann ich <strong>Wasser</strong> haben? — Can I have water?"},
-  {de:"das Buch",     en:"book",                article:"das",base:"Buch",       type:"noun",  lv:"A1",example:"Ich lese ein <strong>Buch</strong>. — I'm reading a book."},
-  {de:"die Mutter",   en:"mother",              article:"die",base:"Mutter",     type:"noun",  lv:"A1",example:"Meine <strong>Mutter</strong> kocht gut."},
-  {de:"der Vater",    en:"father",              article:"der",base:"Vater",      type:"noun",  lv:"A1",example:"Mein <strong>Vater</strong> arbeitet viel."},
-  {de:"die Schule",   en:"school",              article:"die",base:"Schule",     type:"noun",  lv:"A1",example:"Die Kinder gehen zur <strong>Schule</strong>."},
-  {de:"das Zimmer",   en:"room",                article:"das",base:"Zimmer",     type:"noun",  lv:"A1",example:"Das <strong>Zimmer</strong> ist sauber."},
-  {de:"das Wetter",   en:"weather",             article:"das",base:"Wetter",     type:"noun",  lv:"A1",example:"Das <strong>Wetter</strong> ist schön."},
-  {de:"der Abend",    en:"evening",             article:"der",base:"Abend",      type:"noun",  lv:"A1",example:"Guten <strong>Abend</strong>!"},
-  {de:"die Nacht",    en:"night",               article:"die",base:"Nacht",      type:"noun",  lv:"A1",example:"Gute <strong>Nacht</strong>!"},
-  // ─ A1 VERBS ─
-  {de:"sein",         en:"to be",               type:"verb",  lv:"A1",example:"Ich <strong>bin</strong> müde. — I am tired."},
-  {de:"haben",        en:"to have",             type:"verb",  lv:"A1",example:"Ich <strong>habe</strong> Hunger. — I am hungry."},
-  {de:"machen",       en:"to make / do",        type:"verb",  lv:"A1",example:"Was <strong>machst</strong> du? — What are you doing?"},
-  {de:"gehen",        en:"to go",               type:"verb",  lv:"A1",example:"Ich <strong>gehe</strong> nach Hause. — I'm going home."},
-  {de:"kommen",       en:"to come",             type:"verb",  lv:"A1",example:"Er <strong>kommt</strong> morgen."},
-  {de:"essen",        en:"to eat",              type:"verb",  lv:"A1",example:"Was <strong>isst</strong> du? — What are you eating?"},
-  {de:"trinken",      en:"to drink",            type:"verb",  lv:"A1",example:"Er <strong>trinkt</strong> Kaffee."},
-  {de:"heißen",       en:"to be called",        type:"verb",  lv:"A1",example:"Ich <strong>heiße</strong> Max. — My name is Max."},
-  // ─ A1 ADJECTIVES ─
-  {de:"groß",         en:"big / tall",          type:"adj",   lv:"A1",example:"Das Haus ist <strong>groß</strong>."},
-  {de:"klein",        en:"small",               type:"adj",   lv:"A1",example:"Die Katze ist <strong>klein</strong>."},
-  {de:"gut",          en:"good",                type:"adj",   lv:"A1",example:"Das ist sehr <strong>gut</strong>!"},
-  {de:"schlecht",     en:"bad",                 type:"adj",   lv:"A1",example:"Das Wetter ist <strong>schlecht</strong>."},
-  {de:"alt",          en:"old",                 type:"adj",   lv:"A1",example:"Das ist ein <strong>altes</strong> Buch."},
-  {de:"neu",          en:"new",                 type:"adj",   lv:"A1",example:"Ich habe ein <strong>neues</strong> Auto."},
-  // ─ A1 PHRASES ─
-  {de:"Wie geht's?",  en:"How are you? (informal)", type:"phrase",lv:"A1",example:"<strong>Wie geht's</strong>? Mir geht's gut."},
-  {de:"Bitte",        en:"please / you're welcome",  type:"phrase",lv:"A1",example:"<strong>Bitte</strong> hilf mir. — Please help me."},
-  {de:"Danke schön",  en:"Thank you very much",      type:"phrase",lv:"A1",example:"<strong>Danke schön</strong>!"},
-  {de:"Ich heiße…",   en:"My name is…",              type:"phrase",lv:"A1",example:"<strong>Ich heiße</strong> Lena."},
+let VOCAB = [];
 
-  // ─ A2 NOUNS ─
-  {de:"der Mensch",   en:"person / human",      article:"der",base:"Mensch",     type:"noun",  lv:"A2",example:"<strong>Der Mensch</strong> lebt von Hoffnung."},
-  {de:"die Arbeit",   en:"work / job",          article:"die",base:"Arbeit",     type:"noun",  lv:"A2",example:"<strong>Die Arbeit</strong> macht Freude."},
-  {de:"der Freund",   en:"friend (m.)",         article:"der",base:"Freund",     type:"noun",  lv:"A2",example:"<strong>Der Freund</strong> hilft mir."},
-  {de:"die Freundin", en:"friend (f.)",         article:"die",base:"Freundin",   type:"noun",  lv:"A2",example:"Meine <strong>Freundin</strong> ist nett."},
-  {de:"die Stadt",    en:"city",                article:"die",base:"Stadt",      type:"noun",  lv:"A2",example:"Berlin ist eine große <strong>Stadt</strong>."},
-  {de:"der Zug",      en:"train",               article:"der",base:"Zug",        type:"noun",  lv:"A2",example:"Der <strong>Zug</strong> kommt um 8 Uhr."},
-  {de:"der Bahnhof",  en:"train station",       article:"der",base:"Bahnhof",    type:"noun",  lv:"A2",example:"<strong>Der Bahnhof</strong> ist in der Mitte."},
-  {de:"das Geld",     en:"money",               article:"das",base:"Geld",       type:"noun",  lv:"A2",example:"<strong>Geld</strong> allein macht nicht glücklich."},
-  {de:"die Küche",    en:"kitchen",             article:"die",base:"Küche",      type:"noun",  lv:"A2",example:"Sie kocht in der <strong>Küche</strong>."},
-  {de:"die Straße",   en:"street",              article:"die",base:"Straße",     type:"noun",  lv:"A2",example:"Die <strong>Straße</strong> ist leer."},
-  // ─ A2 VERBS ─
-  {de:"wohnen",       en:"to live (reside)",    type:"verb",  lv:"A2",example:"Wo <strong>wohnst</strong> du? — Where do you live?"},
-  {de:"arbeiten",     en:"to work",             type:"verb",  lv:"A2",example:"Sie <strong>arbeitet</strong> viel."},
-  {de:"kaufen",       en:"to buy",              type:"verb",  lv:"A2",example:"Ich <strong>kaufe</strong> Brot."},
-  {de:"fahren",       en:"to drive / travel",   type:"verb",  lv:"A2",example:"Wir <strong>fahren</strong> nach Berlin."},
-  {de:"schlafen",     en:"to sleep",            type:"verb",  lv:"A2",example:"Das Kind <strong>schläft</strong> schon."},
-  {de:"lernen",       en:"to learn",            type:"verb",  lv:"A2",example:"Ich <strong>lerne</strong> Deutsch."},
-  {de:"helfen",       en:"to help",             type:"verb",  lv:"A2",example:"Kannst du mir <strong>helfen</strong>?"},
-  {de:"brauchen",     en:"to need",             type:"verb",  lv:"A2",example:"Ich <strong>brauche</strong> Hilfe."},
-  {de:"fragen",       en:"to ask",              type:"verb",  lv:"A2",example:"Darf ich <strong>fragen</strong>?"},
-  // ─ A2 ADJECTIVES ─
-  {de:"schön",        en:"beautiful / nice",    type:"adj",   lv:"A2",example:"Die Stadt ist <strong>schön</strong>."},
-  {de:"teuer",        en:"expensive",           type:"adj",   lv:"A2",example:"Das ist zu <strong>teuer</strong>."},
-  {de:"billig",       en:"cheap",               type:"adj",   lv:"A2",example:"Das Hemd ist <strong>billig</strong>."},
-  {de:"müde",         en:"tired",               type:"adj",   lv:"A2",example:"Ich bin <strong>müde</strong>."},
-  {de:"fertig",       en:"done / ready",        type:"adj",   lv:"A2",example:"Ich bin <strong>fertig</strong>."},
-  // ─ A2 PHRASES ─
-  {de:"Es tut mir leid",      en:"I'm sorry",              type:"phrase",lv:"A2",example:"<strong>Es tut mir leid</strong>."},
-  {de:"Ich verstehe nicht",   en:"I don't understand",     type:"phrase",lv:"A2",example:"<strong>Ich verstehe nicht</strong>."},
-  {de:"Wo ist…?",             en:"Where is…?",             type:"phrase",lv:"A2",example:"<strong>Wo ist</strong> der Bahnhof?"},
-  {de:"Wie viel kostet das?", en:"How much does it cost?", type:"phrase",lv:"A2",example:"<strong>Wie viel kostet das</strong>?"},
-
-  // ─ B1 NOUNS ─
-  {de:"die Sprache",      en:"language",         article:"die",base:"Sprache",      type:"noun",lv:"B1",example:"<strong>Sprache</strong> verbindet Menschen."},
-  {de:"das Leben",        en:"life",             article:"das",base:"Leben",        type:"noun",lv:"B1",example:"<strong>Das Leben</strong> ist schön."},
-  {de:"die Welt",         en:"world",            article:"die",base:"Welt",         type:"noun",lv:"B1",example:"<strong>Die Welt</strong> ist rund."},
-  {de:"der Weg",          en:"way / path",       article:"der",base:"Weg",          type:"noun",lv:"B1",example:"Welcher <strong>Weg</strong> führt zum Bahnhof?"},
-  {de:"die Frage",        en:"question",         article:"die",base:"Frage",        type:"noun",lv:"B1",example:"Ich habe eine <strong>Frage</strong>."},
-  {de:"die Möglichkeit",  en:"possibility",      article:"die",base:"Möglichkeit",  type:"noun",lv:"B1",example:"Das ist eine große <strong>Möglichkeit</strong>."},
-  {de:"das Ergebnis",     en:"result / outcome", article:"das",base:"Ergebnis",     type:"noun",lv:"B1",example:"Das <strong>Ergebnis</strong> war überraschend."},
-  {de:"der Schlüssel",    en:"key",              article:"der",base:"Schlüssel",    type:"noun",lv:"B1",example:"Ich habe den <strong>Schlüssel</strong> vergessen."},
-  // ─ B1 VERBS ─
-  {de:"verstehen",    en:"to understand",        type:"verb",lv:"B1",example:"Ich <strong>verstehe</strong> nicht."},
-  {de:"denken",       en:"to think",             type:"verb",lv:"B1",example:"Ich <strong>denke</strong> an dich."},
-  {de:"sprechen",     en:"to speak",             type:"verb",lv:"B1",example:"Er <strong>spricht</strong> Deutsch."},
-  {de:"schreiben",    en:"to write",             type:"verb",lv:"B1",example:"Sie <strong>schreibt</strong> einen Brief."},
-  {de:"lesen",        en:"to read",              type:"verb",lv:"B1",example:"Er <strong>liest</strong> gern Bücher."},
-  {de:"sehen",        en:"to see",               type:"verb",lv:"B1",example:"Ich <strong>sehe</strong> dich."},
-  {de:"hören",        en:"to hear / listen",     type:"verb",lv:"B1",example:"Ich <strong>höre</strong> Musik."},
-  {de:"kennen",       en:"to know (people)",     type:"verb",lv:"B1",example:"Ich <strong>kenne</strong> ihn gut."},
-  {de:"wissen",       en:"to know (facts)",      type:"verb",lv:"B1",example:"Ich <strong>weiß</strong> es nicht."},
-  {de:"finden",       en:"to find",              type:"verb",lv:"B1",example:"Ich kann es nicht <strong>finden</strong>."},
-  // ─ B1 ADJECTIVES ─
-  {de:"wichtig",      en:"important",            type:"adj",lv:"B1",example:"Das ist sehr <strong>wichtig</strong>."},
-  {de:"schnell",      en:"fast / quick",         type:"adj",lv:"B1",example:"Der Zug ist <strong>schnell</strong>."},
-  {de:"langsam",      en:"slow",                 type:"adj",lv:"B1",example:"Bitte sprechen Sie <strong>langsam</strong>."},
-  {de:"möglich",      en:"possible",             type:"adj",lv:"B1",example:"Ist das <strong>möglich</strong>?"},
-  {de:"notwendig",    en:"necessary",            type:"adj",lv:"B1",example:"Das ist <strong>notwendig</strong>."},
-  {de:"krank",        en:"sick / ill",           type:"adj",lv:"B1",example:"Er ist <strong>krank</strong>."},
-
-  // ─ B2 NOUNS ─
-  {de:"die Entwicklung",   en:"development",         article:"die",base:"Entwicklung",   type:"noun",lv:"B2",example:"Die <strong>Entwicklung</strong> war rasant."},
-  {de:"der Zusammenhang",  en:"context / connection",article:"der",base:"Zusammenhang",  type:"noun",lv:"B2",example:"Im <strong>Zusammenhang</strong> mit diesem Thema."},
-  {de:"die Auswirkung",    en:"impact / effect",     article:"die",base:"Auswirkung",    type:"noun",lv:"B2",example:"Die <strong>Auswirkung</strong> war enorm."},
-  {de:"das Bewusstsein",   en:"awareness / consciousness",article:"das",base:"Bewusstsein",type:"noun",lv:"B2",example:"<strong>Bewusstsein</strong> für Umweltfragen."},
-  {de:"die Einschränkung", en:"restriction / limitation",article:"die",base:"Einschränkung",type:"noun",lv:"B2",example:"Es gibt viele <strong>Einschränkungen</strong>."},
-  // ─ B2 VERBS ─
-  {de:"erkennen",         en:"to recognise / realise",  type:"verb",lv:"B2",example:"Ich <strong>erkenne</strong> das Muster."},
-  {de:"vermeiden",        en:"to avoid",                type:"verb",lv:"B2",example:"Wir sollten Fehler <strong>vermeiden</strong>."},
-  {de:"überzeugen",       en:"to convince",             type:"verb",lv:"B2",example:"Er konnte mich <strong>überzeugen</strong>."},
-  {de:"vorschlagen",      en:"to suggest / propose",    type:"verb",lv:"B2",example:"Ich <strong>schlage</strong> eine Pause <strong>vor</strong>."},
-  {de:"berücksichtigen",  en:"to take into account",    type:"verb",lv:"B2",example:"Das muss man <strong>berücksichtigen</strong>."},
-  // ─ B2 ADJECTIVES ─
-  {de:"nachhaltig",   en:"sustainable",          type:"adj",lv:"B2",example:"<strong>Nachhaltige</strong> Energie ist wichtig."},
-  {de:"vielfältig",   en:"diverse / varied",     type:"adj",lv:"B2",example:"Die Kultur ist <strong>vielfältig</strong>."},
-  {de:"aufwendig",    en:"elaborate / costly",   type:"adj",lv:"B2",example:"Das ist ein <strong>aufwendiges</strong> Projekt."},
-
-  // ─ C1 NOUNS ─
-  {de:"die Auseinandersetzung", en:"confrontation / debate",  article:"die",base:"Auseinandersetzung",type:"noun",lv:"C1",example:"Eine sachliche <strong>Auseinandersetzung</strong>."},
-  {de:"das Gleichgewicht",      en:"balance / equilibrium",   article:"das",base:"Gleichgewicht",     type:"noun",lv:"C1",example:"Das <strong>Gleichgewicht</strong> der Kräfte."},
-  {de:"die Zurückhaltung",      en:"restraint / reserve",     article:"die",base:"Zurückhaltung",     type:"noun",lv:"C1",example:"Er handelte mit <strong>Zurückhaltung</strong>."},
-  {de:"die Verantwortlichkeit", en:"accountability",          article:"die",base:"Verantwortlichkeit",type:"noun",lv:"C1",example:"<strong>Verantwortlichkeit</strong> im Beruf."},
-  // ─ C1 VERBS ─
-  {de:"abwägen",          en:"to weigh up / deliberate",    type:"verb",lv:"C1",example:"Man muss die Optionen <strong>abwägen</strong>."},
-  {de:"anstreben",        en:"to strive for / aspire to",   type:"verb",lv:"C1",example:"Er <strong>strebt</strong> Perfektion <strong>an</strong>."},
-  {de:"sich beziehen auf",en:"to refer to",                 type:"verb",lv:"C1",example:"Das <strong>bezieht sich auf</strong> den letzten Punkt."},
-  // ─ C1 ADJECTIVES ─
-  {de:"eigenständig",  en:"independent / autonomous",  type:"adj",lv:"C1",example:"Er arbeitet sehr <strong>eigenständig</strong>."},
-  {de:"schlüssig",     en:"conclusive / logical",      type:"adj",lv:"C1",example:"Das Argument ist <strong>schlüssig</strong>."},
-  {de:"tiefgreifend",  en:"far-reaching / profound",   type:"adj",lv:"C1",example:"Ein <strong>tiefgreifender</strong> Wandel."},
-
-  // ─ C2 NOUNS ─
-  {de:"die Ambiguität",           en:"ambiguity",       article:"die",base:"Ambiguität",           type:"noun",lv:"C2",example:"Die <strong>Ambiguität</strong> des Textes."},
-  {de:"das Fingerspitzengefühl",  en:"tact / finesse",  article:"das",base:"Fingerspitzengefühl",  type:"noun",lv:"C2",example:"Das erfordert <strong>Fingerspitzengefühl</strong>."},
-  {de:"die Hinterlistigkeit",     en:"cunning / deviousness",article:"die",base:"Hinterlistigkeit",type:"noun",lv:"C2",example:"Seine <strong>Hinterlistigkeit</strong> war offensichtlich."},
-  // ─ C2 VERBS ─
-  {de:"untermauern",  en:"to substantiate / underpin",       type:"verb",lv:"C2",example:"Er <strong>untermauerte</strong> seine These."},
-  {de:"verschleiern", en:"to obscure / disguise",            type:"verb",lv:"C2",example:"Sie versuchte die Wahrheit zu <strong>verschleiern</strong>."},
-  {de:"ergründen",    en:"to fathom / get to the bottom of", type:"verb",lv:"C2",example:"Ich versuche es zu <strong>ergründen</strong>."},
-  // ─ C2 ADJECTIVES ─
-  {de:"unerschütterlich",en:"unshakeable / steadfast",   type:"adj",lv:"C2",example:"Sein <strong>unerschütterlicher</strong> Glaube."},
-  {de:"weitschweifig",   en:"verbose / long-winded",     type:"adj",lv:"C2",example:"Die Erklärung war <strong>weitschweifig</strong>."},
-  {de:"unabdingbar",     en:"indispensable / essential", type:"adj",lv:"C2",example:"Das ist <strong>unabdingbar</strong>."},
-];
-
-// Stable ID per card
-VOCAB.forEach((c,i) => { c.id = c.de.replace(/[\s.?…]/g,'_') + '_' + i; });
 
 // ═══════════════════════════════════════════════════════════════
 //  LOCALSTORAGE
@@ -798,8 +653,15 @@ $('cardScene').addEventListener('touchend',e=>{
 },{passive:true});
 
 // ─ BOOT ─
-updateLevelCounts();
-startSession();
+fetch('vocab.json')
+  .then(r => r.json())
+  .then(data => {
+    VOCAB = data;
+    VOCAB.forEach((c,i) => { c.id = c.de.replace(/[\s.?…]/g,'_') + '_' + i; });
+    updateLevelCounts();
+    startSession();
+  })
+  .catch(err => console.error('Failed to load vocab.json:', err));
 </script>
 </body>
 </html>
