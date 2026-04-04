@@ -162,7 +162,7 @@
     "de": "auch",
     "en": "also",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ich bin auch Spanier. — I am also Spanish.",
     "audio": "googletts-68783e0b-38b2f730-d4bed1a7-7d0a5c62-a7e8b725.mp3"
   },
@@ -541,7 +541,7 @@
     "de": "bald",
     "en": "soon",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ich komme bald. — I’m coming soon.",
     "audio": "googletts-ea648d1b-f8cad2ff-dfeca904-bf54a498-ba75c106.mp3"
   },
@@ -679,7 +679,7 @@
     "de": "beide",
     "en": "both",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Beide Eltern arbeiten. — Both parents work.",
     "audio": "googletts-ab3a335c-c7339e90-31769f7b-ba301658-7b0ce975.mp3"
   },
@@ -687,7 +687,7 @@
     "de": "beide",
     "en": "both",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Wir kommen beide. — We are both coming.",
     "audio": "googletts-afa423da-2036be1d-b9c1938f-afceac94-0843444f.mp3"
   },
@@ -725,7 +725,7 @@
     "de": "bekannt",
     "en": "well known",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Picasso ist sehr bekannt. — Picasso is very well known.",
     "audio": "googletts-c473652c-f5c89c21-26c19c1b-9d83603b-22f3efb7.mp3"
   },
@@ -799,7 +799,7 @@
     "de": "besetzt",
     "en": "busy",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Die Nummer ist immer besetzt. — The number is always busy.",
     "audio": "googletts-d3e8197f-40decae0-8031161e-d92104a7-35bdeb03.mp3"
   },
@@ -807,7 +807,7 @@
     "de": "besetzt",
     "en": "taken",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Der Platz ist besetzt. — The seat is taken.",
     "audio": "googletts-6be4616d-726253c3-0e9438d9-5635c89a-c097a7fd.mp3"
   },
@@ -823,7 +823,7 @@
     "de": "besser",
     "en": "better",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Es geht mir schon besser. — I'm already feeling better.",
     "audio": "googletts-0cbe4320-1e0c0ba1-d762feea-8d7f1799-d7ad4881.mp3"
   },
@@ -831,7 +831,7 @@
     "de": "best-",
     "en": "best",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Am besten treffen wir uns morgen. — It's best that we meet tomorrow.",
     "audio": "googletts-d436a3fc-f985df83-ffb4f67c-6f74ac3a-d6d62703.mp3"
   },
@@ -919,30 +919,6 @@
     "audio": "googletts-675fa160-0887cedd-a4eecddc-5d707da7-883fb3fc.mp3"
   },
   {
-    "de": "bis",
-    "en": "to (as far as)",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Ich fahre nur bis Stuttgart. — I’m only travelling to Stuttgart.",
-    "audio": "googletts-dad3705e-4a9f1623-9c95499d-703338ce-4fdbdb10.mp3"
-  },
-  {
-    "de": "bis",
-    "en": "until",
-    "lv": "A1",
-    "type": "prep",
-    "example": "Ich warte bis morgen. — I will wait until tomorrow.",
-    "audio": "googletts-986aad6f-b7c2eeff-9eafb3e9-0a639cd1-d9bab6ab.mp3"
-  },
-  {
-    "de": "bisschen",
-    "en": "(a) little",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Ich spreche Englisch, Französisch und ein bisschen Deutsch. — I speak English, French, and a little German.",
-    "audio": "googletts-bd436812-593b541c-3ed3685a-adcb7854-ca622194.mp3"
-  },
-  {
     "de": "bitte",
     "en": "please",
     "lv": "A1",
@@ -981,7 +957,7 @@
     "de": "bitter",
     "en": "bitter",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Der Kaffee schmeckt bitter. — The coffee tastes bitter.",
     "audio": "googletts-58d3b4a4-80fa9796-4e2821ca-a0c1a114-f91e7df4.mp3"
   },
@@ -1047,7 +1023,7 @@
     "de": "böse",
     "en": "angry",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Sie ist böse auf mich. — She is angry with me.",
     "audio": "googletts-0d0c7712-4792e5bd-bf6509af-b8f2710c-ce01d335.mp3"
   },
@@ -1063,7 +1039,7 @@
     "de": "breit",
     "en": "wide",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Wie breit ist der Schrank? — How wide is the cupboard?",
     "audio": "googletts-41035de3-c42e890c-1f0d127c-39337734-ccecee42.mp3"
   },
@@ -1247,7 +1223,7 @@
     "de": "circa/ca.",
     "en": "approximately",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Von Mainz nach Frankfurt sind es circa fünfzig Kilometer. — From Mainz to Frankfurt it is approximately 50 kilometres.",
     "audio": "googletts-6843264a-8cca16bf-8362f443-742c1e7b-aa9660b2.mp3"
   },
@@ -1266,7 +1242,7 @@
     "de": "da",
     "en": "there",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Da hinten ist er ja. — He’s back there.",
     "audio": "googletts-b4b9fbf1-9b5ee3d2-fad23d68-c8967473-6e50f545.mp3"
   },
@@ -1274,7 +1250,7 @@
     "de": "da",
     "en": "here",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Wir sprechen gerade über Paul. Da kommt er ja gerade. — We are talking about Paul. Here he comes now.",
     "audio": "googletts-d33fb76f-1e7e6c7a-1d0d76dc-ecb0277e-63ea2440.mp3"
   },
@@ -1282,7 +1258,7 @@
     "de": "da",
     "en": "there",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ich nehme das da. — I’ll take that there.",
     "audio": "googletts-097eed7c-36b8b480-575ef66b-aff84e65-c4ddabe0.mp3"
   },
@@ -1290,7 +1266,7 @@
     "de": "da",
     "en": "here",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ist Herr Klein schon da? — Is Mr Klein already here?",
     "audio": "googletts-3f777ac4-81f7aba1-e0985c46-a00c0215-69fd1560.mp3"
   },
@@ -1315,14 +1291,6 @@
     "plural": "-n",
     "example": "Sehr geehrte Damen und Herren! — Ladies and gentlemen!",
     "audio": "googletts-3a0b19d1-221b4517-514df623-fb4e44b1-8a6626e1.mp3"
-  },
-  {
-    "de": "daneben",
-    "en": "next to it",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Du kennst doch die Post. Daneben ist die Bank. — You do know the post office. The bank is next to it.",
-    "audio": "googletts-1c6f08b2-3d2dde60-da678219-97cfac6a-3f155186.mp3"
   },
   {
     "de": "danken",
@@ -1356,7 +1324,7 @@
     "de": "danke",
     "en": "thank you",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Soll ich Ihnen helfen? / Nein, danke! — Can I help you? / No thank you!",
     "audio": "googletts-829b29ef-29c6c316-da693b6f-92d87827-fceaa85f.mp3"
   },
@@ -1364,7 +1332,7 @@
     "de": "dann",
     "en": "then (afterwards)",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ich muss noch schnell zur Post, dann komme ich. — I still need to pop to the post office, then I’ll come.",
     "audio": "googletts-c031156e-cff66ab8-1b9cc8bd-c4ac7916-1f7e52e9.mp3"
   },
@@ -1390,7 +1358,7 @@
     "de": "dein-",
     "en": "your",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ist das dein Auto? — Is that your car?",
     "audio": "googletts-a6b27e19-d31d0a03-a799c3c1-456600e6-c547d4b9.mp3"
   },
@@ -1398,7 +1366,7 @@
     "de": "dein-",
     "en": "yourself",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ist das deins? — Is that yours?",
     "audio": "googletts-f85e5b6f-e2b5f8f5-dd5eca12-d617d4f3-70271347.mp3"
   },
@@ -1406,7 +1374,7 @@
     "de": "denn",
     "en": "because",
     "lv": "A1",
-    "type": "prep",
+    "type": "conj",
     "example": "Ich kann nicht kommen, denn ich bin krank. — I can’t come because I’m ill.",
     "audio": "googletts-029164e1-6a1b1fbe-6ad71b46-612b1dfe-1966879e.mp3"
   },
@@ -1414,7 +1382,7 @@
     "de": "dich",
     "en": "you",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Die Blumen sind für dich. — The flowers are for you.",
     "audio": "googletts-8a849e3f-25e8f880-d3fd886d-42c601a0-e560accb.mp3"
   },
@@ -1422,7 +1390,7 @@
     "de": "dies-",
     "en": "this",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ich nehme lieber diesen Kuchen. — I’d prefer to have this cake.",
     "audio": "googletts-7d6d6aca-28a6586d-07f581e4-e421740f-0b683eb8.mp3"
   },
@@ -1430,7 +1398,7 @@
     "de": "dir",
     "en": "you",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Gefallen dir die Blumen? — Do you like the flowers?",
     "audio": "googletts-dd2a529d-5540ec0f-3120cf36-e7ce13ae-d6b76aa1.mp3"
   },
@@ -1479,7 +1447,7 @@
     "de": "dort",
     "en": "there",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Dort ist mein Zimmer. — There's my room.",
     "audio": "googletts-dec107e4-d2348790-82a0aaa9-c02ee1f7-73a4d4b7.mp3"
   },
@@ -1487,7 +1455,7 @@
     "de": "dorthin",
     "en": "there (to that place, in that direction)",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Deine Tasche kannst du dorthin stellen. — You can put your bag there.",
     "audio": "googletts-1b4d8b72-0135bd92-749039ec-f8460eac-8315109e.mp3"
   },
@@ -1495,7 +1463,7 @@
     "de": "dorther",
     "en": "from there",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Er kommt gerade dorther. — He's just coming from there.",
     "audio": "googletts-8ac1f0b8-3186eb03-b29dae7b-6bbdc876-fc49aefe.mp3"
   },
@@ -1503,7 +1471,7 @@
     "de": "draußen",
     "en": "outside",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Wollen wir draußen sitzen? — Shall we sit outside?",
     "audio": "googletts-27c95f84-cb8f9959-8d373cd9-cef22976-37c832ea.mp3",
     "note": "lit. “do we want to…”"
@@ -1654,7 +1622,7 @@
     "de": "ein-",
     "en": "one / a",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ich nehme ein Bier. Willst du auch eins? — I’ll have a beer. Do you want one, too?",
     "audio": "googletts-e46905e7-ee4107e1-ea9b90c9-6440ad2f-667b5b95.mp3"
   },
@@ -1662,7 +1630,7 @@
     "de": "ein-",
     "en": "someone",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ist hier einer, der das kann? — Is there someone here who can do that?",
     "audio": "googletts-39f9d0bc-5b92e130-8b07fd90-263e6520-7547eda4.mp3",
     "note": "alt: “Ist hier jemand…”"
@@ -1671,7 +1639,7 @@
     "de": "einfach",
     "en": "simple",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Die Prüfung ist ganz einfach. — The test is very simple.",
     "audio": "googletts-34c22067-a1848871-33f92655-af4a9008-85744dc0.mp3"
   },
@@ -1679,7 +1647,7 @@
     "de": "einfach",
     "en": "a single (ticket)",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Hin und zurück? / Nein, bitte nur einfach. — Return? / No, just a single, please.",
     "audio": "googletts-690aaaa3-a5c041b9-accdb329-44350649-e68e2d4e.mp3"
   },
@@ -1687,7 +1655,7 @@
     "de": "einfach",
     "en": "simple",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Ich brauche nur ein einfaches Zimmer. — I just need a simple room.",
     "audio": "googletts-f3e78730-3bf4f56a-788e88e0-7e5218ba-d4f0785e.mp3"
   },
@@ -1851,7 +1819,7 @@
     "de": "er",
     "en": "he",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Er heißt Ali. — He’s called Ali.",
     "audio": "googletts-ca88f449-44c838d2-0dee2610-620f5edd-b5448032.mp3"
   },
@@ -1878,7 +1846,7 @@
     "de": "erlauben",
     "en": "allow",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Rauchen ist hier nicht erlaubt. — Smoking is not allowed here.",
     "audio": "googletts-531744a8-b608288b-dc004dd9-87447935-cd10aaac.mp3"
   },
@@ -1905,7 +1873,7 @@
     "de": "es",
     "en": "it",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Es regnet. — It’s raining.",
     "audio": "googletts-8417c87f-31291aca-a8c59ed7-34cd52ad-a8d1282f.mp3"
   },
@@ -1931,7 +1899,7 @@
     "de": "euer",
     "en": "your [pl.]",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Euer Kurs beginnt heute. — Your course begins today.",
     "audio": "googletts-931d8284-e07dfcfc-63bbdcf2-040eecb1-1d4478b1.mp3"
   },
@@ -1979,7 +1947,7 @@
     "de": "falsch",
     "en": "wrong / incorrect",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Das ist falsch. — That is wrong.",
     "audio": "googletts-0e0c9404-bc4a61df-5cc388db-1b95d353-ebb69fd2.mp3"
   },
@@ -2319,7 +2287,7 @@
     "de": "frei",
     "en": "free",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Ist der Platz noch frei? — Is this seat still free?",
     "audio": "googletts-af319b2a-98f40251-d11c06ee-2bfb5943-abcc5d20.mp3"
   },
@@ -2337,7 +2305,7 @@
     "de": "fremd",
     "en": "foreign",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Das weiß ich nicht, ich bin fremd hier. — I don’t know, I’m not from here.",
     "audio": "googletts-587f0908-7f04d89d-78fcaee3-cbbae9e6-6d3242da.mp3"
   },
@@ -2375,7 +2343,7 @@
     "de": "früher",
     "en": "earlier / in the past",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Früher waren wir oft zusammen im Kino. — In the past we often went to the cinema together.",
     "audio": "googletts-de5f2354-01a6504e-c7957a9b-1e0a4e73-c7ad4899.mp3"
   },
@@ -2490,14 +2458,6 @@
     "audio": "googletts-9c8b4330-7a1cd19f-49d4e70b-f8b70761-0fedbbf5.mp3"
   },
   {
-    "de": "geboren",
-    "en": "born",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Ich bin in Zagreb geboren. — I was born in Zagreb.",
-    "audio": "googletts-93537dcf-b05f37ab-bdad9f0c-bfb86f8a-4f6223e5.mp3"
-  },
-  {
     "de": "das Geburtsjahr",
     "en": "birth year",
     "lv": "A1",
@@ -2535,30 +2495,6 @@
     "type": "verb",
     "example": "Das gefällt mir. — I like that.",
     "audio": "googletts-f6e2878c-0caeaee6-93816aa5-36d3be07-fb42dea2.mp3"
-  },
-  {
-    "de": "gegen",
-    "en": "into",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Fahr nicht gegen den Baum! — Don’t drive into the tree!",
-    "audio": "googletts-46e8dbcf-b4f7b3d8-7e314b7e-af90b478-a16864e8.mp3"
-  },
-  {
-    "de": "gegen",
-    "en": "against",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Ich bin gegen diese Lösung. — I am against this solution.",
-    "audio": "googletts-6cdc0af0-377f8d74-d0718cce-64fe5a6b-a283b0a8.mp3"
-  },
-  {
-    "de": "gegen",
-    "en": "against",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Wer spielt gegen wen? — Who is playing against whom?",
-    "audio": "googletts-d81215d7-3785e713-acbe538b-623498fa-5d2a085d.mp3"
   },
   {
     "de": "gehen",
@@ -2642,7 +2578,7 @@
     "de": "gerade",
     "en": "now",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Da kommt er ja gerade. — There he comes now.",
     "audio": "googletts-dc989303-78aa0426-934f7443-5914c5d9-23bba3e2.mp3"
   },
@@ -2650,7 +2586,7 @@
     "de": "geradeaus",
     "en": "straight on",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Gehen Sie immer geradeaus! — Keep going straight on!",
     "audio": "googletts-cb3445b9-54943884-2f126303-e89f9322-492b366f.mp3"
   },
@@ -2696,22 +2632,6 @@
     "plural": "-e",
     "example": "Das <strong>Gespräch</strong> mit Frau Kunz ist um 14 Uhr. — The conversation with Ms Kunz is at 2 pm.",
     "audio": "googletts-6854ff7a-cb380adf-4a29a8ee-36dd7a02-41099176.mp3"
-  },
-  {
-    "de": "gestern",
-    "en": "yesterday",
-    "lv": "A1",
-    "type": "adv",
-    "example": "Gestern war ich krank. — Yesterday I was ill.",
-    "audio": "googletts-bc86108d-0816841b-bfa5cfc6-a1fad3bd-b183f791.mp3"
-  },
-  {
-    "de": "gestorben",
-    "en": "died",
-    "lv": "A1",
-    "type": "verb",
-    "example": "Meine Frau ist gestern gestorben. — My wife died yesterday.",
-    "audio": "googletts-d4669a31-0c6e3f07-b029f48a-610f95ab-992cc027.mp3"
   },
   {
     "de": "das Getränk, -e",
@@ -2784,7 +2704,7 @@
     "de": "gleich",
     "en": "same",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Das ist mir gleich. — It’s all the same to me.",
     "audio": "googletts-11ebc0c1-74c6351a-39b26c33-51d4f138-10630f95.mp3"
   },
@@ -2792,7 +2712,7 @@
     "de": "gleich",
     "en": "same",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Das ist der gleiche Preis. — That is the same price.",
     "audio": "googletts-db2a95b2-0709401f-0e6fc670-ffeaa58f-6830d9df.mp3"
   },
@@ -2800,7 +2720,7 @@
     "de": "gleich",
     "en": "now",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Ich komme gleich. — I’ll be right there.",
     "audio": "googletts-9dd3272f-25253a30-0e732761-cd5d1734-95e68224.mp3"
   },
@@ -2871,7 +2791,7 @@
     "de": "groß",
     "en": "tall",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Mein Bruder und ich sind gleich groß. — My brother and I are the same height.",
     "audio": "googletts-c8130624-aa2d4f9e-ea86ba9a-cbfa8ee1-83c62b4b.mp3"
   },
@@ -2879,7 +2799,7 @@
     "de": "groß",
     "en": "large",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Frankfurt ist eine große Stadt. — Frankfurt is a large town.",
     "audio": "googletts-b07bde53-71edf4af-5c3951f7-a9b8f1de-5ad5e44d.mp3"
   },
@@ -2976,7 +2896,7 @@
     "de": "gut",
     "en": "good",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Das finde ich gut. — I think that’s good.",
     "audio": "googletts-4c5b53bc-78b7a1d0-cb1a228a-00bdd155-9ae64499.mp3"
   },
@@ -2984,7 +2904,7 @@
     "de": "gut",
     "en": "good",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Ich komme um 13 Uhr. / Gut! — I will arrive at 1 pm. / Good!",
     "audio": "googletts-e8211f5e-96d305c8-436fa87c-5b444678-15e97a3f.mp3"
   },
@@ -2992,7 +2912,7 @@
     "de": "gut",
     "en": "good",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Guten Morgen! — Good morning!",
     "audio": "googletts-e5d87c37-aadb89c4-385e1b95-b9581f96-162d26d6.mp3"
   },
@@ -3050,7 +2970,7 @@
     "de": "hallo",
     "en": "hello",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Hallo Inge! Wie geht’s? — Hello Inge! How’s it going?",
     "audio": "googletts-bc511182-0554835f-c1c4ed5a-c6ae6c80-a61bcfa3.mp3"
   },
@@ -3234,7 +3154,7 @@
     "de": "heute",
     "en": "today",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Heute ist ein schöner Tag. — Today is a beautiful day.",
     "audio": "googletts-d2f39848-4cd0a271-c95d3b35-98b74cf2-ea0be019.mp3"
   },
@@ -3242,7 +3162,7 @@
     "de": "hier",
     "en": "here",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Hier ist 06131-553221, Pamela Linke. — This is 06131-553221, Pamela Linke.",
     "audio": "googletts-20a555b1-7c780903-bd058d07-fa724d72-288cb37f.mp3"
   },
@@ -3250,7 +3170,7 @@
     "de": "hier",
     "en": "here",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Hier wohne ich. — I live here.",
     "audio": "googletts-3f9d6f91-0bc559b7-5a815352-04955b8f-aaeb647b.mp3"
   },
@@ -3297,7 +3217,7 @@
     "de": "hoch",
     "en": "high",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Der Mount Everest ist 8.880 Meter hoch. — Mount Everest is 8,880 metres high.",
     "audio": "googletts-46ec3946-8b08430a-fc9cc0d4-ab4e561c-f6e7caca.mp3"
   },
@@ -3371,7 +3291,7 @@
     "de": "ich",
     "en": "I",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ich heiße Veronika. — I’m called Veronika.",
     "audio": "googletts-e6cc45c7-b4979196-5b545002-6ff939c1-41faba63.mp3"
   },
@@ -3379,7 +3299,7 @@
     "de": "ihm/ihr",
     "en": "him/her",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Gib ihm/ihr bitte das Buch. — Please give the book to him/her.",
     "audio": "googletts-b569213d-fcbd9ae1-f2d62244-c05ca4f9-82254c4d.mp3"
   },
@@ -3387,7 +3307,7 @@
     "de": "ihn",
     "en": "him",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Ruf ihn bitte an. — Call him, please.",
     "audio": "googletts-444ab5e7-8fd9aa06-19ad1f2d-50a72cf6-1b2ef6e2.mp3"
   },
@@ -3395,7 +3315,7 @@
     "de": "immer",
     "en": "always",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Frau Bast kommt immer zu spät. — Ms Bast is always late.",
     "audio": "googletts-8fd60881-dec1b2c1-d61bf8bd-24489219-516c308d.mp3"
   },
@@ -3494,7 +3414,7 @@
     "de": "jed-",
     "en": "every",
     "lv": "A1",
-    "type": "prep",
+    "type": "pron",
     "example": "Blumen kannst du in jedem Bahnhof kaufen. — You can buy flowers at every station.",
     "audio": "googletts-16b213d5-b6d056c5-1a717598-fadf5902-78d4618f.mp3"
   },
@@ -3502,7 +3422,7 @@
     "de": "jetzt",
     "en": "now",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Jetzt machen wir eine Pause. — Now we will take a break.",
     "audio": "googletts-9c1010b5-1565527b-4ca016e9-453c0ffb-84db396a.mp3"
   },
@@ -3532,7 +3452,7 @@
     "de": "jung",
     "en": "young",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Claudia ist 21. / Was? Noch so jung? — Claudia is 21. / What? Still so young?",
     "audio": "googletts-e6e02da2-c041bc99-d9dd538d-34ce928c-517b1cdb.mp3"
   },
@@ -3561,7 +3481,7 @@
     "de": "kaputt",
     "en": "broken",
     "lv": "A1",
-    "type": "prep",
+    "type": "adj",
     "example": "Das Glas ist kaputt. — The glass is broken.",
     "audio": "googletts-3b638366-d1f32658-e81b7079-7e2764e6-40eb2c9c.mp3"
   },
@@ -4481,7 +4401,7 @@
     "de": "möchten",
     "en": "would like to",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Was möchten Sie trinken? — What would you like to drink?",
     "audio": "googletts-4b5a6fe2-6bd2c1ca-5c467366-1531ecc5-37ee2627.mp3"
   },
@@ -4525,7 +4445,7 @@
     "de": "morgen",
     "en": "tomorrow",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Morgen beginnt die Schule um 10 Uhr. — Tomorrow school begins at 10 am.",
     "audio": "googletts-c9c1eddf-69c981f1-dcbb0721-30130376-9c7c8a1b.mp3"
   },
@@ -4697,7 +4617,7 @@
     "de": "noch",
     "en": "still",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Vielleicht kommt er noch. — Perhaps he will still come.",
     "audio": "googletts-85cc368d-c62cd079-2ba30262-fe108926-6c022251.mp3"
   },
@@ -4705,7 +4625,7 @@
     "de": "noch",
     "en": "another",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Wir warten noch fünf Minuten. — We will wait another five minutes.",
     "audio": "googletts-f1d5e919-d31fb39e-340c55c8-223491f5-33ed5d06.mp3"
   },
@@ -4713,7 +4633,7 @@
     "de": "noch",
     "en": "still",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ich habe noch 20 Euro. — I still have 20 euros.",
     "audio": "googletts-c7bc7920-b5c69f46-92abcdaa-825ff4ce-35b5a231.mp3"
   },
@@ -4759,7 +4679,7 @@
     "de": "oben",
     "en": "upstairs",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Ich wohne oben. — I live upstairs.",
     "audio": "googletts-ba78a494-7082df6a-9f086f63-981193cf-965b1309.mp3"
   },
@@ -4777,7 +4697,7 @@
     "de": "oder",
     "en": "or",
     "lv": "A1",
-    "type": "prep",
+    "type": "conj",
     "example": "Wann können Sie kommen – heute oder morgen? — When can you come – today or tomorrow?",
     "audio": "googletts-94f0734f-e90e5e69-1d140249-9b49664c-a25153e1.mp3"
   },
@@ -5449,7 +5369,7 @@
     "de": "geschlossen",
     "en": "closed",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Die Bank hat am Samstag geschlossen. — The bank is closed on Saturday.",
     "audio": "googletts-69a12ff5-d5f716c7-23fb139a-1bedb8f6-6c97e9e6.mp3"
   },
@@ -5494,7 +5414,7 @@
     "de": "schon",
     "en": "already",
     "lv": "A1",
-    "type": "prep",
+    "type": "adv",
     "example": "Ist das Essen schon fertig? — Is the food done already?",
     "audio": "googletts-561a2eaf-16baa073-019859e7-acffd40f-5c38ec7a.mp3"
   },
@@ -5843,7 +5763,7 @@
     "de": "sollen",
     "en": "should",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Soll ich kommen? — Should I come?",
     "audio": "googletts-a70c2734-012eb485-13a12e04-91e8587b-a1f6a9e0.mp3"
   },
@@ -5851,7 +5771,7 @@
     "de": "sollen",
     "en": "should",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Was soll ich mitbringen? — What should I bring with me?",
     "audio": "googletts-9c558d0b-d3f1d28a-56fff7e8-a6394658-040455e1.mp3"
   },
@@ -6383,7 +6303,7 @@
     "de": "und",
     "en": "and",
     "lv": "A1",
-    "type": "prep",
+    "type": "conj",
     "example": "Peter und Helmut sind meine Söhne. — Peter and Helmut are my sons.",
     "audio": "googletts-4b33a471-6e59a00c-52441adf-82f5b46e-78a6354b.mp3"
   },
@@ -6400,7 +6320,7 @@
     "de": "unten",
     "en": "at the bottom",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Er wohnt ganz unten im Haus. — He lives right at the bottom of the house.",
     "audio": "googletts-9b48fcfc-92cd346a-6237bafb-dca19f50-b16d685a.mp3"
   },
@@ -6465,7 +6385,7 @@
     "de": "verboten",
     "en": "forbidden",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Hier ist Rauchen verboten. — Smoking is forbidden here.",
     "audio": "googletts-033ec458-9f24991d-8ac7c9ab-48722690-aacba0dc.mp3"
   },
@@ -7169,7 +7089,7 @@
     "de": "zufrieden",
     "en": "happy",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Ich bin mit der Wohnung zufrieden. — I am happy with the flat.",
     "audio": "googletts-feb74649-f5ee4918-02b5b791-6a5cc9c4-018240cd.mp3"
   },
@@ -7204,7 +7124,7 @@
     "de": "zusammen",
     "en": "together",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Sollen wir zusammen essen gehen? — Should we go out to eat together?",
     "audio": "googletts-53e748a6-4811aa2d-26da98de-a6bd989a-105a2f36.mp3"
   },
@@ -7212,7 +7132,7 @@
     "de": "zusammen",
     "en": "together",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Das macht zusammen 2 Euro 80. — Together that comes to 2 euros 80.",
     "audio": "googletts-7ca99ee4-e083a399-756d8f60-908d5b96-b2fc7f88.mp3"
   },
@@ -7220,7 +7140,7 @@
     "de": "zwischen",
     "en": "between",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Heidelberg liegt zwischen Frankfurt und Stuttgart. — Heidelberg is located between Frankfurt and Stuttgart.",
     "audio": "googletts-5eccd4da-096cb86e-a1345167-413a1589-aa3bb2ea.mp3"
   },
@@ -7228,7 +7148,7 @@
     "de": "zwischen",
     "en": "between",
     "lv": "A1",
-    "type": "verb",
+    "type": "adv",
     "example": "Zwischen 8 und 10 Uhr bin ich zu Hause. — I’m at home between 8 and 10 o’clock.",
     "audio": "googletts-56f1fbef-45831c33-75cd7b1c-1c935268-48433078.mp3"
   },
@@ -7272,7 +7192,7 @@
     "de": "sieben",
     "en": "seven",
     "lv": "A1",
-    "type": "verb"
+    "type": "adv"
   },
   {
     "de": "acht",
@@ -7428,13 +7348,13 @@
     "de": "eine Million, -en",
     "en": "one million",
     "lv": "A1",
-    "type": "verb"
+    "type": "adv"
   },
   {
     "de": "eine Milliarde, -en",
     "en": "one billion",
     "lv": "A1",
-    "type": "verb"
+    "type": "adv"
   },
   {
     "de": "erste",
