@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="100" fill="#0e0e0f"/>
+  <!-- Card stack -->
+  <rect x="100" y="162" width="312" height="210" rx="30" fill="#232328" stroke="#2e2e35" stroke-width="3"/>
+  <rect x="84"  y="146" width="312" height="210" rx="30" fill="#18181b" stroke="#2e2e35" stroke-width="3"/>
+  <rect x="68"  y="130" width="312" height="210" rx="30" fill="#1c1c22" stroke="#2e2e35" stroke-width="3"/>
+  <!-- Logotype -->
+  <text x="224" y="262" font-family="Georgia,serif" font-size="78" font-weight="700" fill="#c8f04a" text-anchor="middle">VS</text>
+  <!-- accent line -->
+  <rect x="156" y="284" width="136" height="7" rx="3.5" fill="#c8f04a" opacity="0.55"/>
+  <!-- page dots -->
+  <circle cx="196" cy="390" r="10" fill="#c8f04a"/>
+  <circle cx="228" cy="390" r="10" fill="#2e2e35"/>
+  <circle cx="260" cy="390" r="10" fill="#2e2e35"/>
+</svg>

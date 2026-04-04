@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VocabScroll</title>
+<meta name="description" content="German-English flashcard app with spaced repetition">
+<meta name="theme-color" content="#0e0e0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VocabScroll">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0e0e0f; --surface:#18181b; --surface2:#232328; --border:#2e2e35;
+  --text:#f0ede8; --muted:#7a7a8a; --accent:#c8f04a; --accent-dim:#8aad2a;
+  --red:#ff5f5f; --red-dim:#c43c3c;
+  --card-front:#1c1c22; --card-back:#1e2018;
+  --tag-noun:#3a6ea8; --tag-verb:#7a3a8a; --tag-adj:#8a5a1a; --tag-phrase:#2a6a5a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif;
+  height:100vh;height:100dvh;display:flex;flex-direction:column;align-items:center;
+  overflow:hidden;user-select:none}
+
+/* HEADER */
+.header{width:100%;max-width:480px;padding:16px 20px 8px;display:flex;
+  align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-size:1.2rem;font-weight:700;letter-spacing:-0.02em}
+.logo span{color:var(--accent)}
+.header-right{display:flex;gap:8px;align-items:center}
+.stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:4px 10px;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);
+  display:flex;align-items:center;gap:4px}
+.stat-pill .val{color:var(--text);font-weight:500}
+.settings-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:0.9rem;transition:all .2s}
+.settings-btn:hover{border-color:var(--muted)}
+
+/* LEVEL FILTER */
+.level-row{width:100%;max-width:480px;padding:0 20px 8px;display:flex;gap:6px;
+  flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.level-row::-webkit-scrollbar{display:none}
+.lv-btn{flex-shrink:0;padding:5px 10px;border-radius:8px;font-family:'DM Mono',monospace;
+  font-size:0.68rem;font-weight:500;cursor:pointer;border:1.5px solid transparent;
+  transition:all .2s;opacity:0.45;background:var(--surface);color:var(--muted)}
+.lv-btn.active{opacity:1}
+.lv-btn[data-lv="all"].active{border-color:var(--muted);color:var(--text)}
+.lv-btn[data-lv="A1"]{color:#52d68a}.lv-btn[data-lv="A1"].active{background:#1a3d2b;border-color:#52d68a}
+.lv-btn[data-lv="A2"]{color:#63e0a0}.lv-btn[data-lv="A2"].active{background:#1a3028;border-color:#63e0a0}
+.lv-btn[data-lv="B1"]{color:#6a9ef5}.lv-btn[data-lv="B1"].active{background:#1a2240;border-color:#6a9ef5}
+.lv-btn[data-lv="B2"]{color:#85aeff}.lv-btn[data-lv="B2"].active{background:#1a1f3a;border-color:#85aeff}
+.lv-btn[data-lv="C1"]{color:#c97de8}.lv-btn[data-lv="C1"].active{background:#2a1a30;border-color:#c97de8}
+.lv-btn[data-lv="C2"]{color:#f07a88}.lv-btn[data-lv="C2"].active{background:#2a1018;border-color:#f07a88}
+.lv-count{font-size:.6rem;opacity:.65;margin-left:2px}
+
+/* MODE ROW */
+.mode-row{width:100%;max-width:480px;padding:0 20px 10px;display:flex;gap:6px;flex-shrink:0}
+.mode-btn{flex:1;padding:7px 4px;background:var(--surface);border:1px solid var(--border);
+  border-radius:9px;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.68rem;
+  cursor:pointer;transition:all .2s;text-align:center}
+.mode-btn.active{background:var(--accent);border-color:var(--accent);color:#0e0e0f;font-weight:500}
+
+/* PROGRESS */
+.progress-wrap{width:100%;max-width:480px;padding:0 20px 10px;flex-shrink:0}
+.progress-bar-bg{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:2px;
+  transition:width .4s ease;box-shadow:0 0 8px var(--accent)}
+.progress-label{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);
+  margin-top:5px;display:flex;justify-content:space-between}
+
+/* CARD ARENA */
+.card-arena{flex:1;width:100%;max-width:480px;padding:0 20px;
+  display:flex;align-items:center;justify-content:center;position:relative;min-height:0}
+.ghost-card{position:absolute;width:calc(100% - 40px);max-width:440px;height:270px;
+  border-radius:20px;border:1px solid var(--border)}
+.ghost-card:nth-child(1){background:var(--surface2);transform:translateY(8px) scale(.95);z-index:1}
+.ghost-card:nth-child(2){background:var(--surface);transform:translateY(4px) scale(.975);z-index:2}
+
+/* ── FLIP CARD — back-face flash fix ──
+   Root cause: some browsers briefly paint the back face before
+   backface-visibility kicks in. Fix: give the back face an explicit
+   rotateY(180deg) transform so it starts already rotated away, AND
+   force a new stacking context with isolation:isolate + translateZ(0).
+*/
+.card-scene{width:100%;height:270px;perspective:1200px;cursor:pointer;z-index:3;position:relative}
+.card-3d{width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);position:relative}
+.card-3d.flipped{transform:rotateY(180deg)}
+
+.card-face{
+  position:absolute;inset:0;border-radius:20px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  /* translateZ(0) forces GPU layer, preventing the flash on Chrome/Safari */
+  -webkit-transform:translateZ(0);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 24px;border:1px solid var(--border);overflow:hidden}
+.card-front{background:var(--card-front);transform:rotateY(0deg) translateZ(1px)}
+/* Key fix: back starts pre-rotated 180deg so it's NEVER facing forward at t=0 */
+.card-back{background:var(--card-back);transform:rotateY(180deg) translateZ(1px);border-color:#2e3520}
+
+.card-hint{position:absolute;top:14px;font-family:'DM Mono',monospace;
+  font-size:.62rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.card-tag{position:absolute;top:12px;right:14px;padding:3px 8px;border-radius:6px;
+  font-family:'DM Mono',monospace;font-size:.6rem;font-weight:500;letter-spacing:.04em}
+.tag-noun{background:var(--tag-noun);color:#b8d4f8}
+.tag-verb{background:var(--tag-verb);color:#d4b8f8}
+.tag-adj{background:var(--tag-adj);color:#f8d4b8}
+.tag-phrase{background:var(--tag-phrase);color:#b8f0e0}
+
+.card-level-badge{position:absolute;bottom:12px;left:14px;padding:2px 7px;
+  border-radius:5px;font-family:'DM Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:.06em}
+.badge-A1{background:#1a3d2b;color:#52d68a}
+.badge-A2{background:#1a3028;color:#63e0a0}
+.badge-B1{background:#1a2240;color:#6a9ef5}
+.badge-B2{background:#1a1f3a;color:#85aeff}
+.badge-C1{background:#2a1a30;color:#c97de8}
+.badge-C2{background:#2a1018;color:#f07a88}
+
+.sr-badge{position:absolute;bottom:12px;right:14px;font-family:'DM Mono',monospace;
+  font-size:.58rem;color:var(--border);letter-spacing:.04em}
+.sr-badge.due{color:#f0a050}
+
+.card-word{font-size:2.2rem;font-weight:300;letter-spacing:-0.02em;text-align:center;line-height:1.1}
+.card-article{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+.card-translation{font-size:2rem;font-weight:400;font-style:italic;text-align:center;color:var(--accent);line-height:1.15}
+.card-example{margin-top:12px;font-size:.82rem;font-weight:300;color:var(--muted);
+  text-align:center;line-height:1.5;font-style:italic}
+.card-example strong{color:#a0c8f0;font-style:normal;font-weight:400}
+.tap-hint{position:absolute;bottom:14px;font-family:'DM Mono',monospace;
+  font-size:.6rem;color:var(--border);letter-spacing:.06em}
+
+.card-scene.swipe-right{animation:swipeRight .38s ease forwards}
+.card-scene.swipe-left{animation:swipeLeft .38s ease forwards}
+@keyframes swipeRight{to{transform:translateX(120%) rotate(12deg);opacity:0}}
+@keyframes swipeLeft{to{transform:translateX(-120%) rotate(-12deg);opacity:0}}
+
+.feedback{position:absolute;inset:0;border-radius:20px;display:flex;
+  align-items:center;justify-content:center;font-size:4rem;
+  opacity:0;pointer-events:none;z-index:10;transition:opacity .12s}
+.feedback.show{opacity:1}
+.feedback.got-it{background:rgba(200,240,74,.15)}
+.feedback.missed{background:rgba(255,95,95,.15)}
+
+/* ACTIONS */
+.actions{width:100%;max-width:480px;padding:12px 20px;display:flex;gap:12px;flex-shrink:0}
+.btn{flex:1;padding:14px;border:none;border-radius:13px;font-size:1.3rem;cursor:pointer;
+  transition:transform .12s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(.94)}
+.btn-miss{background:#2a1515;border:1.5px solid var(--red-dim);color:var(--red)}
+.btn-got{background:#1a2a0a;border:1.5px solid var(--accent-dim);color:var(--accent)}
+.btn-label{font-family:'DM Mono',monospace;font-size:.68rem;opacity:.7}
+
+/* BOTTOM BAR */
+.bottom-bar{width:100%;max-width:480px;padding:0 20px 16px;
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.bottom-stat{font-family:'DM Mono',monospace;font-size:.67rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.dot-green{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.dot-red{background:var(--red)}
+.skip-btn{background:none;border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:.65rem;
+  padding:5px 10px;cursor:pointer;transition:all .2s}
+.skip-btn:hover{color:var(--text);border-color:var(--muted)}
+
+/* DONE SCREEN */
+.done-screen{display:none;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;width:100%;max-width:480px;padding:20px;text-align:center;gap:14px}
+.done-screen.show{display:flex}
+.done-big{font-size:4rem}
+.done-title{font-size:1.8rem;font-weight:300}
+.done-scores{display:flex;gap:20px;margin:4px 0}
+.done-score-item{text-align:center}
+.done-score-num{font-size:2.2rem;font-weight:700}
+.done-score-num.green{color:var(--accent)}
+.done-score-num.red{color:var(--red)}
+.done-score-lbl{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);margin-top:2px}
+.done-sub{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);line-height:1.8;white-space:pre-line}
+.done-level-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:4px 0}
+.done-lv-chip{padding:4px 12px;border-radius:8px;font-family:'DM Mono',monospace;font-size:.68rem;font-weight:600}
+.restart-btn{background:var(--accent);color:#0e0e0f;border:none;border-radius:12px;
+  padding:13px 28px;font-family:'Fraunces',serif;font-size:1rem;font-weight:700;
+  cursor:pointer;margin-top:4px;transition:transform .12s}
+.restart-btn:active{transform:scale(.96)}
+
+/* SETTINGS PANEL */
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;
+  display:none;align-items:flex-end;justify-content:center}
+.panel-overlay.show{display:flex}
+.panel{width:100%;max-width:480px;background:var(--surface);border-radius:20px 20px 0 0;
+  padding:24px 20px 32px;border:1px solid var(--border);border-bottom:none}
+.panel-title{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.panel-row{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--border)}
+.panel-row:last-of-type{border-bottom:none}
+.panel-label{font-size:.9rem;font-weight:300}
+.panel-sub{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);margin-top:2px}
+.panel-val{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--accent);text-align:right;max-width:55%}
+.panel-close{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:.75rem;
+  padding:8px 20px;cursor:pointer;margin-top:16px;width:100%}
+.reset-link{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--red-dim);
+  cursor:pointer;text-decoration:underline;margin-top:8px;display:block;text-align:center}
+
+/* EMPTY STATE */
+.empty-state{display:none;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;text-align:center;padding:20px;
+  position:absolute;inset:0}
+.empty-state.show{display:flex}
+.empty-emoji{font-size:3rem}
+.empty-text{font-size:.95rem;font-weight:300;color:var(--muted);line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Vocab<span>Scroll</span></div>
+  <div class="header-right">
+    <div class="stat-pill">🔥 <span class="val" id="streakVal">0</span></div>
+    <div class="stat-pill"><span class="val" id="sessionScore">0</span>/<span id="sessionTotal">20</span></div>
+    <div class="settings-btn" onclick="openSettings()">⚙️</div>
+  </div>
+</div>
+
+<div class="level-row">
+  <button class="lv-btn active" data-lv="all"  onclick="setLevel('all')">All <span class="lv-count" id="cnt-all"></span></button>
+  <button class="lv-btn"        data-lv="A1"   onclick="setLevel('A1')">A1 <span class="lv-count" id="cnt-A1"></span></button>
+  <button class="lv-btn"        data-lv="A2"   onclick="setLevel('A2')">A2 <span class="lv-count" id="cnt-A2"></span></button>
+  <button class="lv-btn"        data-lv="B1"   onclick="setLevel('B1')">B1 <span class="lv-count" id="cnt-B1"></span></button>
+  <button class="lv-btn"        data-lv="B2"   onclick="setLevel('B2')">B2 <span class="lv-count" id="cnt-B2"></span></button>
+  <button class="lv-btn"        data-lv="C1"   onclick="setLevel('C1')">C1 <span class="lv-count" id="cnt-C1"></span></button>
+  <button class="lv-btn"        data-lv="C2"   onclick="setLevel('C2')">C2 <span class="lv-count" id="cnt-C2"></span></button>
+</div>
+
+<div class="mode-row">
+  <button class="mode-btn active" onclick="setMode('de-en')">🇩🇪→🇬🇧</button>
+  <button class="mode-btn"        onclick="setMode('en-de')">🇬🇧→🇩🇪</button>
+  <button class="mode-btn"        onclick="setMode('random')">🔀 Mix</button>
+  <button class="mode-btn"        onclick="setMode('due')">⏰ Due</button>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label">
+    <span id="progressLabel">0 of 20</span>
+    <span id="dueLabel" style="color:var(--accent)"></span>
+  </div>
+</div>
+
+<div class="card-arena" id="cardArena">
+  <div class="ghost-card"></div>
+  <div class="ghost-card"></div>
+
+  <div class="card-scene" id="cardScene" onclick="flipCard()">
+    <div class="card-3d" id="card3d">
+      <div class="card-face card-front">
+        <div class="card-hint" id="frontHint">GERMAN</div>
+        <div class="card-tag"  id="cardTag"></div>
+        <div class="card-word" id="frontWord">—</div>
+        <div class="card-article" id="cardArticle"></div>
+        <div class="card-level-badge" id="frontLvBadge"></div>
+        <div class="sr-badge" id="srBadge"></div>
+        <div class="tap-hint">tap to reveal ↓</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-hint" id="backHint">ENGLISH</div>
+        <div class="card-translation" id="backTranslation">—</div>
+        <div class="card-example" id="cardExample"></div>
+      </div>
+    </div>
+    <div class="feedback" id="feedbackOverlay"></div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-emoji">✅</div>
+    <div class="empty-text">No cards due right now.<br>Come back later, or browse all cards!</div>
+    <button class="restart-btn" style="font-size:.85rem;padding:10px 20px" onclick="setMode('de-en')">Browse All →</button>
+  </div>
+</div>
+
+<div class="actions" id="actionsBar">
+  <button class="btn btn-miss" onclick="answer(false)">✗ <span class="btn-label">missed</span></button>
+  <button class="btn btn-got"  onclick="answer(true)">✓ <span class="btn-label">got it</span></button>
+</div>
+
+<div class="bottom-bar" id="bottomBar">
+  <div class="bottom-stat">
+    <span class="dot dot-green"></span><span id="gotCount">0</span> correct &nbsp;
+    <span class="dot dot-red"></span><span id="missCount">0</span> missed
+  </div>
+  <button class="skip-btn" onclick="answer(null)">skip →</button>
+</div>
+
+<div class="done-screen" id="doneScreen">
+  <div class="done-big">🎉</div>
+  <div class="done-title">Round complete!</div>
+  <div class="done-scores">
+    <div class="done-score-item"><div class="done-score-num green" id="doneGot">0</div><div class="done-score-lbl">correct</div></div>
+    <div class="done-score-item"><div class="done-score-num red"   id="doneMiss">0</div><div class="done-score-lbl">missed</div></div>
+    <div class="done-score-item"><div class="done-score-num" id="doneStreak" style="color:var(--accent)">0</div><div class="done-score-lbl">🔥 streak</div></div>
+  </div>
+  <div class="done-sub" id="doneSub"></div>
+  <div class="done-level-row" id="doneLevelRow"></div>
+  <button class="restart-btn" onclick="startSession()">Next Round →</button>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div class="panel-overlay" id="panelOverlay" onclick="closeSettings(event)">
+  <div class="panel">
+    <div class="panel-title">Stats &amp; Settings</div>
+    <div class="panel-row">
+      <div><div class="panel-label">Total reviewed</div></div>
+      <div class="panel-val" id="stTotalReviewed">0</div>
+    </div>
+    <div class="panel-row">
+      <div><div class="panel-label">All-time correct</div></div>
+      <div class="panel-val" id="stTotalCorrect">0</div>
+    </div>
+    <div class="panel-row">
+      <div><div class="panel-label">Best streak</div></div>
+      <div class="panel-val" id="stBestStreak">0 🔥</div>
+    </div>
+    <div class="panel-row">
+      <div><div class="panel-label">Cards due now</div></div>
+      <div class="panel-val" id="stDueToday">0</div>
+    </div>
+    <div class="panel-row">
+      <div>
+        <div class="panel-label">Mastered per level</div>
+        <div class="panel-sub">≥3 correct reviews, interval ≥21 days</div>
+      </div>
+      <div class="panel-val" id="stLevelProgress" style="font-size:.7rem;line-height:1.7"></div>
+    </div>
+    <button class="panel-close" onclick="closeSettings()">Close</button>
+    <span class="reset-link" onclick="resetData()">Reset all progress</span>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  VOCABULARY  — CEFR-tagged (A1 → C2)
+// ═══════════════════════════════════════════════════════════════
+const VOCAB = [
+  // ─ A1 NOUNS ─
+  {de:"das Haus",     en:"house",               article:"das",base:"Haus",       type:"noun",  lv:"A1",example:"<strong>Das Haus</strong> ist groß. — The house is big."},
+  {de:"der Tag",      en:"day",                 article:"der",base:"Tag",        type:"noun",  lv:"A1",example:"Guten <strong>Tag</strong>! — Good day!"},
+  {de:"das Kind",     en:"child",               article:"das",base:"Kind",       type:"noun",  lv:"A1",example:"<strong>Das Kind</strong> spielt. — The child plays."},
+  {de:"das Wasser",   en:"water",               article:"das",base:"Wasser",     type:"noun",  lv:"A1",example:"Kann ich <strong>Wasser</strong> haben? — Can I have water?"},
+  {de:"das Buch",     en:"book",                article:"das",base:"Buch",       type:"noun",  lv:"A1",example:"Ich lese ein <strong>Buch</strong>. — I'm reading a book."},
+  {de:"die Mutter",   en:"mother",              article:"die",base:"Mutter",     type:"noun",  lv:"A1",example:"Meine <strong>Mutter</strong> kocht gut."},
+  {de:"der Vater",    en:"father",              article:"der",base:"Vater",      type:"noun",  lv:"A1",example:"Mein <strong>Vater</strong> arbeitet viel."},
+  {de:"die Schule",   en:"school",              article:"die",base:"Schule",     type:"noun",  lv:"A1",example:"Die Kinder gehen zur <strong>Schule</strong>."},
+  {de:"das Zimmer",   en:"room",                article:"das",base:"Zimmer",     type:"noun",  lv:"A1",example:"Das <strong>Zimmer</strong> ist sauber."},
+  {de:"das Wetter",   en:"weather",             article:"das",base:"Wetter",     type:"noun",  lv:"A1",example:"Das <strong>Wetter</strong> ist schön."},
+  {de:"der Abend",    en:"evening",             article:"der",base:"Abend",      type:"noun",  lv:"A1",example:"Guten <strong>Abend</strong>!"},
+  {de:"die Nacht",    en:"night",               article:"die",base:"Nacht",      type:"noun",  lv:"A1",example:"Gute <strong>Nacht</strong>!"},
+  // ─ A1 VERBS ─
+  {de:"sein",         en:"to be",               type:"verb",  lv:"A1",example:"Ich <strong>bin</strong> müde. — I am tired."},
+  {de:"haben",        en:"to have",             type:"verb",  lv:"A1",example:"Ich <strong>habe</strong> Hunger. — I am hungry."},
+  {de:"machen",       en:"to make / do",        type:"verb",  lv:"A1",example:"Was <strong>machst</strong> du? — What are you doing?"},
+  {de:"gehen",        en:"to go",               type:"verb",  lv:"A1",example:"Ich <strong>gehe</strong> nach Hause. — I'm going home."},
+  {de:"kommen",       en:"to come",             type:"verb",  lv:"A1",example:"Er <strong>kommt</strong> morgen."},
+  {de:"essen",        en:"to eat",              type:"verb",  lv:"A1",example:"Was <strong>isst</strong> du? — What are you eating?"},
+  {de:"trinken",      en:"to drink",            type:"verb",  lv:"A1",example:"Er <strong>trinkt</strong> Kaffee."},
+  {de:"heißen",       en:"to be called",        type:"verb",  lv:"A1",example:"Ich <strong>heiße</strong> Max. — My name is Max."},
+  // ─ A1 ADJECTIVES ─
+  {de:"groß",         en:"big / tall",          type:"adj",   lv:"A1",example:"Das Haus ist <strong>groß</strong>."},
+  {de:"klein",        en:"small",               type:"adj",   lv:"A1",example:"Die Katze ist <strong>klein</strong>."},
+  {de:"gut",          en:"good",                type:"adj",   lv:"A1",example:"Das ist sehr <strong>gut</strong>!"},
+  {de:"schlecht",     en:"bad",                 type:"adj",   lv:"A1",example:"Das Wetter ist <strong>schlecht</strong>."},
+  {de:"alt",          en:"old",                 type:"adj",   lv:"A1",example:"Das ist ein <strong>altes</strong> Buch."},
+  {de:"neu",          en:"new",                 type:"adj",   lv:"A1",example:"Ich habe ein <strong>neues</strong> Auto."},
+  // ─ A1 PHRASES ─
+  {de:"Wie geht's?",  en:"How are you? (informal)", type:"phrase",lv:"A1",example:"<strong>Wie geht's</strong>? Mir geht's gut."},
+  {de:"Bitte",        en:"please / you're welcome",  type:"phrase",lv:"A1",example:"<strong>Bitte</strong> hilf mir. — Please help me."},
+  {de:"Danke schön",  en:"Thank you very much",      type:"phrase",lv:"A1",example:"<strong>Danke schön</strong>!"},
+  {de:"Ich heiße…",   en:"My name is…",              type:"phrase",lv:"A1",example:"<strong>Ich heiße</strong> Lena."},
+
+  // ─ A2 NOUNS ─
+  {de:"der Mensch",   en:"person / human",      article:"der",base:"Mensch",     type:"noun",  lv:"A2",example:"<strong>Der Mensch</strong> lebt von Hoffnung."},
+  {de:"die Arbeit",   en:"work / job",          article:"die",base:"Arbeit",     type:"noun",  lv:"A2",example:"<strong>Die Arbeit</strong> macht Freude."},
+  {de:"der Freund",   en:"friend (m.)",         article:"der",base:"Freund",     type:"noun",  lv:"A2",example:"<strong>Der Freund</strong> hilft mir."},
+  {de:"die Freundin", en:"friend (f.)",         article:"die",base:"Freundin",   type:"noun",  lv:"A2",example:"Meine <strong>Freundin</strong> ist nett."},
+  {de:"die Stadt",    en:"city",                article:"die",base:"Stadt",      type:"noun",  lv:"A2",example:"Berlin ist eine große <strong>Stadt</strong>."},
+  {de:"der Zug",      en:"train",               article:"der",base:"Zug",        type:"noun",  lv:"A2",example:"Der <strong>Zug</strong> kommt um 8 Uhr."},
+  {de:"der Bahnhof",  en:"train station",       article:"der",base:"Bahnhof",    type:"noun",  lv:"A2",example:"<strong>Der Bahnhof</strong> ist in der Mitte."},
+  {de:"das Geld",     en:"money",               article:"das",base:"Geld",       type:"noun",  lv:"A2",example:"<strong>Geld</strong> allein macht nicht glücklich."},
+  {de:"die Küche",    en:"kitchen",             article:"die",base:"Küche",      type:"noun",  lv:"A2",example:"Sie kocht in der <strong>Küche</strong>."},
+  {de:"die Straße",   en:"street",              article:"die",base:"Straße",     type:"noun",  lv:"A2",example:"Die <strong>Straße</strong> ist leer."},
+  // ─ A2 VERBS ─
+  {de:"wohnen",       en:"to live (reside)",    type:"verb",  lv:"A2",example:"Wo <strong>wohnst</strong> du? — Where do you live?"},
+  {de:"arbeiten",     en:"to work",             type:"verb",  lv:"A2",example:"Sie <strong>arbeitet</strong> viel."},
+  {de:"kaufen",       en:"to buy",              type:"verb",  lv:"A2",example:"Ich <strong>kaufe</strong> Brot."},
+  {de:"fahren",       en:"to drive / travel",   type:"verb",  lv:"A2",example:"Wir <strong>fahren</strong> nach Berlin."},
+  {de:"schlafen",     en:"to sleep",            type:"verb",  lv:"A2",example:"Das Kind <strong>schläft</strong> schon."},
+  {de:"lernen",       en:"to learn",            type:"verb",  lv:"A2",example:"Ich <strong>lerne</strong> Deutsch."},
+  {de:"helfen",       en:"to help",             type:"verb",  lv:"A2",example:"Kannst du mir <strong>helfen</strong>?"},
+  {de:"brauchen",     en:"to need",             type:"verb",  lv:"A2",example:"Ich <strong>brauche</strong> Hilfe."},
+  {de:"fragen",       en:"to ask",              type:"verb",  lv:"A2",example:"Darf ich <strong>fragen</strong>?"},
+  // ─ A2 ADJECTIVES ─
+  {de:"schön",        en:"beautiful / nice",    type:"adj",   lv:"A2",example:"Die Stadt ist <strong>schön</strong>."},
+  {de:"teuer",        en:"expensive",           type:"adj",   lv:"A2",example:"Das ist zu <strong>teuer</strong>."},
+  {de:"billig",       en:"cheap",               type:"adj",   lv:"A2",example:"Das Hemd ist <strong>billig</strong>."},
+  {de:"müde",         en:"tired",               type:"adj",   lv:"A2",example:"Ich bin <strong>müde</strong>."},
+  {de:"fertig",       en:"done / ready",        type:"adj",   lv:"A2",example:"Ich bin <strong>fertig</strong>."},
+  // ─ A2 PHRASES ─
+  {de:"Es tut mir leid",      en:"I'm sorry",              type:"phrase",lv:"A2",example:"<strong>Es tut mir leid</strong>."},
+  {de:"Ich verstehe nicht",   en:"I don't understand",     type:"phrase",lv:"A2",example:"<strong>Ich verstehe nicht</strong>."},
+  {de:"Wo ist…?",             en:"Where is…?",             type:"phrase",lv:"A2",example:"<strong>Wo ist</strong> der Bahnhof?"},
+  {de:"Wie viel kostet das?", en:"How much does it cost?", type:"phrase",lv:"A2",example:"<strong>Wie viel kostet das</strong>?"},
+
+  // ─ B1 NOUNS ─
+  {de:"die Sprache",      en:"language",         article:"die",base:"Sprache",      type:"noun",lv:"B1",example:"<strong>Sprache</strong> verbindet Menschen."},
+  {de:"das Leben",        en:"life",             article:"das",base:"Leben",        type:"noun",lv:"B1",example:"<strong>Das Leben</strong> ist schön."},
+  {de:"die Welt",         en:"world",            article:"die",base:"Welt",         type:"noun",lv:"B1",example:"<strong>Die Welt</strong> ist rund."},
+  {de:"der Weg",          en:"way / path",       article:"der",base:"Weg",          type:"noun",lv:"B1",example:"Welcher <strong>Weg</strong> führt zum Bahnhof?"},
+  {de:"die Frage",        en:"question",         article:"die",base:"Frage",        type:"noun",lv:"B1",example:"Ich habe eine <strong>Frage</strong>."},
+  {de:"die Möglichkeit",  en:"possibility",      article:"die",base:"Möglichkeit",  type:"noun",lv:"B1",example:"Das ist eine große <strong>Möglichkeit</strong>."},
+  {de:"das Ergebnis",     en:"result / outcome", article:"das",base:"Ergebnis",     type:"noun",lv:"B1",example:"Das <strong>Ergebnis</strong> war überraschend."},
+  {de:"der Schlüssel",    en:"key",              article:"der",base:"Schlüssel",    type:"noun",lv:"B1",example:"Ich habe den <strong>Schlüssel</strong> vergessen."},
+  // ─ B1 VERBS ─
+  {de:"verstehen",    en:"to understand",        type:"verb",lv:"B1",example:"Ich <strong>verstehe</strong> nicht."},
+  {de:"denken",       en:"to think",             type:"verb",lv:"B1",example:"Ich <strong>denke</strong> an dich."},
+  {de:"sprechen",     en:"to speak",             type:"verb",lv:"B1",example:"Er <strong>spricht</strong> Deutsch."},
+  {de:"schreiben",    en:"to write",             type:"verb",lv:"B1",example:"Sie <strong>schreibt</strong> einen Brief."},
+  {de:"lesen",        en:"to read",              type:"verb",lv:"B1",example:"Er <strong>liest</strong> gern Bücher."},
+  {de:"sehen",        en:"to see",               type:"verb",lv:"B1",example:"Ich <strong>sehe</strong> dich."},
+  {de:"hören",        en:"to hear / listen",     type:"verb",lv:"B1",example:"Ich <strong>höre</strong> Musik."},
+  {de:"kennen",       en:"to know (people)",     type:"verb",lv:"B1",example:"Ich <strong>kenne</strong> ihn gut."},
+  {de:"wissen",       en:"to know (facts)",      type:"verb",lv:"B1",example:"Ich <strong>weiß</strong> es nicht."},
+  {de:"finden",       en:"to find",              type:"verb",lv:"B1",example:"Ich kann es nicht <strong>finden</strong>."},
+  // ─ B1 ADJECTIVES ─
+  {de:"wichtig",      en:"important",            type:"adj",lv:"B1",example:"Das ist sehr <strong>wichtig</strong>."},
+  {de:"schnell",      en:"fast / quick",         type:"adj",lv:"B1",example:"Der Zug ist <strong>schnell</strong>."},
+  {de:"langsam",      en:"slow",                 type:"adj",lv:"B1",example:"Bitte sprechen Sie <strong>langsam</strong>."},
+  {de:"möglich",      en:"possible",             type:"adj",lv:"B1",example:"Ist das <strong>möglich</strong>?"},
+  {de:"notwendig",    en:"necessary",            type:"adj",lv:"B1",example:"Das ist <strong>notwendig</strong>."},
+  {de:"krank",        en:"sick / ill",           type:"adj",lv:"B1",example:"Er ist <strong>krank</strong>."},
+
+  // ─ B2 NOUNS ─
+  {de:"die Entwicklung",   en:"development",         article:"die",base:"Entwicklung",   type:"noun",lv:"B2",example:"Die <strong>Entwicklung</strong> war rasant."},
+  {de:"der Zusammenhang",  en:"context / connection",article:"der",base:"Zusammenhang",  type:"noun",lv:"B2",example:"Im <strong>Zusammenhang</strong> mit diesem Thema."},
+  {de:"die Auswirkung",    en:"impact / effect",     article:"die",base:"Auswirkung",    type:"noun",lv:"B2",example:"Die <strong>Auswirkung</strong> war enorm."},
+  {de:"das Bewusstsein",   en:"awareness / consciousness",article:"das",base:"Bewusstsein",type:"noun",lv:"B2",example:"<strong>Bewusstsein</strong> für Umweltfragen."},
+  {de:"die Einschränkung", en:"restriction / limitation",article:"die",base:"Einschränkung",type:"noun",lv:"B2",example:"Es gibt viele <strong>Einschränkungen</strong>."},
+  // ─ B2 VERBS ─
+  {de:"erkennen",         en:"to recognise / realise",  type:"verb",lv:"B2",example:"Ich <strong>erkenne</strong> das Muster."},
+  {de:"vermeiden",        en:"to avoid",                type:"verb",lv:"B2",example:"Wir sollten Fehler <strong>vermeiden</strong>."},
+  {de:"überzeugen",       en:"to convince",             type:"verb",lv:"B2",example:"Er konnte mich <strong>überzeugen</strong>."},
+  {de:"vorschlagen",      en:"to suggest / propose",    type:"verb",lv:"B2",example:"Ich <strong>schlage</strong> eine Pause <strong>vor</strong>."},
+  {de:"berücksichtigen",  en:"to take into account",    type:"verb",lv:"B2",example:"Das muss man <strong>berücksichtigen</strong>."},
+  // ─ B2 ADJECTIVES ─
+  {de:"nachhaltig",   en:"sustainable",          type:"adj",lv:"B2",example:"<strong>Nachhaltige</strong> Energie ist wichtig."},
+  {de:"vielfältig",   en:"diverse / varied",     type:"adj",lv:"B2",example:"Die Kultur ist <strong>vielfältig</strong>."},
+  {de:"aufwendig",    en:"elaborate / costly",   type:"adj",lv:"B2",example:"Das ist ein <strong>aufwendiges</strong> Projekt."},
+
+  // ─ C1 NOUNS ─
+  {de:"die Auseinandersetzung", en:"confrontation / debate",  article:"die",base:"Auseinandersetzung",type:"noun",lv:"C1",example:"Eine sachliche <strong>Auseinandersetzung</strong>."},
+  {de:"das Gleichgewicht",      en:"balance / equilibrium",   article:"das",base:"Gleichgewicht",     type:"noun",lv:"C1",example:"Das <strong>Gleichgewicht</strong> der Kräfte."},
+  {de:"die Zurückhaltung",      en:"restraint / reserve",     article:"die",base:"Zurückhaltung",     type:"noun",lv:"C1",example:"Er handelte mit <strong>Zurückhaltung</strong>."},
+  {de:"die Verantwortlichkeit", en:"accountability",          article:"die",base:"Verantwortlichkeit",type:"noun",lv:"C1",example:"<strong>Verantwortlichkeit</strong> im Beruf."},
+  // ─ C1 VERBS ─
+  {de:"abwägen",          en:"to weigh up / deliberate",    type:"verb",lv:"C1",example:"Man muss die Optionen <strong>abwägen</strong>."},
+  {de:"anstreben",        en:"to strive for / aspire to",   type:"verb",lv:"C1",example:"Er <strong>strebt</strong> Perfektion <strong>an</strong>."},
+  {de:"sich beziehen auf",en:"to refer to",                 type:"verb",lv:"C1",example:"Das <strong>bezieht sich auf</strong> den letzten Punkt."},
+  // ─ C1 ADJECTIVES ─
+  {de:"eigenständig",  en:"independent / autonomous",  type:"adj",lv:"C1",example:"Er arbeitet sehr <strong>eigenständig</strong>."},
+  {de:"schlüssig",     en:"conclusive / logical",      type:"adj",lv:"C1",example:"Das Argument ist <strong>schlüssig</strong>."},
+  {de:"tiefgreifend",  en:"far-reaching / profound",   type:"adj",lv:"C1",example:"Ein <strong>tiefgreifender</strong> Wandel."},
+
+  // ─ C2 NOUNS ─
+  {de:"die Ambiguität",           en:"ambiguity",       article:"die",base:"Ambiguität",           type:"noun",lv:"C2",example:"Die <strong>Ambiguität</strong> des Textes."},
+  {de:"das Fingerspitzengefühl",  en:"tact / finesse",  article:"das",base:"Fingerspitzengefühl",  type:"noun",lv:"C2",example:"Das erfordert <strong>Fingerspitzengefühl</strong>."},
+  {de:"die Hinterlistigkeit",     en:"cunning / deviousness",article:"die",base:"Hinterlistigkeit",type:"noun",lv:"C2",example:"Seine <strong>Hinterlistigkeit</strong> war offensichtlich."},
+  // ─ C2 VERBS ─
+  {de:"untermauern",  en:"to substantiate / underpin",       type:"verb",lv:"C2",example:"Er <strong>untermauerte</strong> seine These."},
+  {de:"verschleiern", en:"to obscure / disguise",            type:"verb",lv:"C2",example:"Sie versuchte die Wahrheit zu <strong>verschleiern</strong>."},
+  {de:"ergründen",    en:"to fathom / get to the bottom of", type:"verb",lv:"C2",example:"Ich versuche es zu <strong>ergründen</strong>."},
+  // ─ C2 ADJECTIVES ─
+  {de:"unerschütterlich",en:"unshakeable / steadfast",   type:"adj",lv:"C2",example:"Sein <strong>unerschütterlicher</strong> Glaube."},
+  {de:"weitschweifig",   en:"verbose / long-winded",     type:"adj",lv:"C2",example:"Die Erklärung war <strong>weitschweifig</strong>."},
+  {de:"unabdingbar",     en:"indispensable / essential", type:"adj",lv:"C2",example:"Das ist <strong>unabdingbar</strong>."},
+];
+
+// Stable ID per card
+VOCAB.forEach((c,i) => { c.id = c.de.replace(/[\s.?…]/g,'_') + '_' + i; });
+
+// ═══════════════════════════════════════════════════════════════
+//  LOCALSTORAGE
+// ═══════════════════════════════════════════════════════════════
+const STORE_KEY = 'vocabscroll_v2';
+function loadStore() {
+  try { const r=localStorage.getItem(STORE_KEY); if(r) return JSON.parse(r); } catch(e){}
+  return {cards:{},totalReviewed:0,totalCorrect:0,bestStreak:0};
+}
+function saveStore() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch(e){}
+}
+let store = loadStore();
+
+function getCardSR(id) {
+  return store.cards[id] || {interval:1,ease:2.5,reps:0,nextDue:0,correct:0,total:0};
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SM-2 SPACED REPETITION
+// ═══════════════════════════════════════════════════════════════
+function sm2Update(sr, quality) {
+  sr.total = (sr.total||0) + 1;
+  if (quality >= 3) {
+    sr.correct = (sr.correct||0) + 1;
+    if      (sr.reps === 0) sr.interval = 1;
+    else if (sr.reps === 1) sr.interval = 6;
+    else                    sr.interval = Math.round(sr.interval * sr.ease);
+    sr.reps++;
+    sr.ease = Math.max(1.3, sr.ease + 0.1 - (5-quality)*(0.08+(5-quality)*0.02));
+  } else {
+    sr.reps = 0;
+    sr.interval = 1;
+  }
+  sr.nextDue = Date.now() + sr.interval * 86400000;
+  return sr;
+}
+
+function isDue(sr)      { return Date.now() >= (sr.nextDue||0); }
+function isMastered(sr) { return sr.reps >= 3 && sr.interval >= 21; }
+
+// ═══════════════════════════════════════════════════════════════
+//  APP STATE
+// ═══════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+let mode='de-en', levelFilter='all';
+let queue=[], currentIdx=0, isFlipped=false, answered=false;
+let got=0, missed=0, streak=0, sessionBest=0;
+let effectiveCardMode='de-en';
+const SESSION_SIZE=20;
+
+// ═══════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════
+function shuffle(a) {
+  const b=[...a];
+  for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
+  return b;
+}
+function filteredVocab() { return levelFilter==='all'?VOCAB:VOCAB.filter(c=>c.lv===levelFilter); }
+function getDueCards()    { return filteredVocab().filter(c=>isDue(getCardSR(c.id))); }
+
+function buildQueue() {
+  let pool;
+  if (mode==='due') {
+    pool=getDueCards();
+    if(!pool.length) return [];
+    pool.sort((a,b)=>getCardSR(a.id).nextDue - getCardSR(b.id).nextDue);
+  } else {
+    const fv=filteredVocab();
+    const due=fv.filter(c=>isDue(getCardSR(c.id)));
+    const rest=shuffle(fv.filter(c=>!isDue(getCardSR(c.id))));
+    pool=[...shuffle(due),...rest];
+  }
+  return pool.slice(0, SESSION_SIZE);
+}
+
+function updateLevelCounts() {
+  $('cnt-all').textContent = VOCAB.length;
+  ['A1','A2','B1','B2','C1','C2'].forEach(lv =>
+    $('cnt-'+lv).textContent = VOCAB.filter(c=>c.lv===lv).length
+  );
+}
+
+function updateDueLabel() {
+  const n=getDueCards().length;
+  $('dueLabel').textContent = n>0 ? n+' due' : '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SESSION
+// ═══════════════════════════════════════════════════════════════
+function startSession() {
+  got=0;missed=0;streak=0;sessionBest=0;answered=false;isFlipped=false;
+  queue=buildQueue(); currentIdx=0;
+
+  $('doneScreen').classList.remove('show');
+  $('cardArena').style.display='';
+  $('actionsBar').style.display='';
+  $('bottomBar').style.display='';
+  $('emptyState').classList.remove('show');
+  $('cardScene').style.display='';
+
+  if (!queue.length) {
+    $('cardScene').style.display='none';
+    $('actionsBar').style.display='none';
+    $('bottomBar').style.display='none';
+    $('emptyState').classList.add('show');
+    return;
+  }
+  updateLevelCounts(); updateDueLabel(); updateStats(); loadCard();
+}
+
+function setMode(m) {
+  mode=m;
+  document.querySelectorAll('.mode-btn').forEach((b,i)=>
+    b.classList.toggle('active',['de-en','en-de','random','due'][i]===m));
+  startSession();
+}
+
+function setLevel(lv) {
+  levelFilter=lv;
+  document.querySelectorAll('.lv-btn').forEach(b=>b.classList.toggle('active',b.dataset.lv===lv));
+  startSession();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CARD LOGIC
+// ═══════════════════════════════════════════════════════════════
+function loadCard() {
+  if (currentIdx>=queue.length) { showDone(); return; }
+  const card=queue[currentIdx];
+  isFlipped=false; answered=false;
+
+  // ── FLIP BUG FIX ──
+  // Disable transition, snap to unflipped, force reflow, re-enable transition
+  const c3d=$('card3d');
+  c3d.style.transition='none';
+  c3d.classList.remove('flipped');
+  void c3d.offsetWidth; // force reflow — flushes pending style before re-enabling
+  c3d.style.transition='';
+
+  $('cardScene').className='card-scene';
+  $('feedbackOverlay').className='feedback';
+
+  effectiveCardMode = mode==='random' ? (Math.random()>.5?'de-en':'en-de')
+                    : mode==='due'    ? 'de-en'
+                    : mode;
+
+  const sr=getCardSR(card.id);
+  const days=sr.reps>0 ? sr.interval+'d' : 'new';
+
+  $('cardTag').textContent=card.type;
+  $('cardTag').className=`card-tag tag-${card.type}`;
+  $('frontLvBadge').textContent=card.lv;
+  $('frontLvBadge').className=`card-level-badge badge-${card.lv}`;
+  $('srBadge').textContent=days;
+  $('srBadge').className=`sr-badge${isDue(sr)?' due':''}`;
+
+  if (effectiveCardMode==='de-en') {
+    $('frontHint').textContent='GERMAN';
+    $('backHint').textContent='ENGLISH';
+    $('frontWord').innerHTML=card.base||card.de;
+    $('cardArticle').textContent=card.article?`article: ${card.article}`:'';
+    $('backTranslation').textContent=card.en;
+  } else {
+    $('frontHint').textContent='ENGLISH';
+    $('backHint').textContent='GERMAN';
+    $('frontWord').innerHTML=card.en;
+    $('cardArticle').textContent='';
+    $('backTranslation').textContent=card.de;
+  }
+  $('cardExample').innerHTML=card.example||'';
+  updateStats();
+}
+
+function flipCard() {
+  if (answered) return;
+  isFlipped=!isFlipped;
+  $('card3d').classList.toggle('flipped',isFlipped);
+}
+
+function answer(correct) {
+  if (answered) return;
+  if (!isFlipped && correct!==null) { flipCard(); setTimeout(()=>doAnswer(correct),270); return; }
+  doAnswer(correct);
+}
+
+function doAnswer(correct) {
+  answered=true;
+  const card=queue[currentIdx];
+  const sr=getCardSR(card.id);
+
+  if (correct===true) {
+    got++; streak++;
+    if(streak>sessionBest) sessionBest=streak;
+    if(streak>store.bestStreak) store.bestStreak=streak;
+    store.totalCorrect++;
+    store.totalReviewed++;
+    store.cards[card.id]=sm2Update(sr,4);
+    showFeedback('got-it','✓');
+  } else if (correct===false) {
+    missed++; streak=0;
+    store.totalReviewed++;
+    store.cards[card.id]=sm2Update(sr,0);
+    showFeedback('missed','✗');
+  }
+  saveStore(); updateStats();
+
+  const delay=correct===null?80:460;
+  setTimeout(()=>{
+    $('cardScene').className='card-scene '+(correct===false?'swipe-left':'swipe-right');
+    setTimeout(()=>{ currentIdx++; loadCard(); },370);
+  },delay);
+}
+
+function showFeedback(cls,emoji) {
+  const el=$('feedbackOverlay');
+  el.textContent=emoji; el.className=`feedback ${cls} show`;
+  setTimeout(()=>el.classList.remove('show'),360);
+}
+
+function updateStats() {
+  $('streakVal').textContent=streak;
+  $('sessionScore').textContent=got;
+  $('sessionTotal').textContent=queue.length||SESSION_SIZE;
+  $('gotCount').textContent=got;
+  $('missCount').textContent=missed;
+  const done=currentIdx, tot=queue.length||1;
+  $('progressFill').style.width=Math.min(done/tot*100,100)+'%';
+  $('progressLabel').textContent=`${done} of ${tot}`;
+}
+
+function showDone() {
+  $('cardArena').style.display='none';
+  $('actionsBar').style.display='none';
+  $('bottomBar').style.display='none';
+  $('doneGot').textContent=got;
+  $('doneMiss').textContent=missed;
+  $('doneStreak').textContent=sessionBest;
+
+  const pct=queue.length?Math.round(got/queue.length*100):0;
+  const msg=pct>=90?"Outstanding! 🌟 You're crushing it.":
+            pct>=70?"Great work! Keep the streak going.":
+            pct>=50?"Solid effort. Review the missed ones!":
+                    "Keep practising — every card counts. 💪";
+  const due=getDueCards().length;
+  $('doneSub').textContent=`${pct}% accuracy  ·  best streak: ${sessionBest}\n${msg}\n${due} cards still due`;
+
+  // Level mastery chips
+  const row=$('doneLevelRow'); row.innerHTML='';
+  ['A1','A2','B1','B2','C1','C2'].forEach(lv=>{
+    const cards=VOCAB.filter(c=>c.lv===lv);
+    const m=cards.filter(c=>isMastered(getCardSR(c.id))).length;
+    const chip=document.createElement('div');
+    chip.className=`done-lv-chip badge-${lv}`;
+    chip.textContent=`${lv} ${m}/${cards.length}`;
+    row.appendChild(chip);
+  });
+
+  $('doneScreen').classList.add('show');
+  updateDueLabel();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════════════════════════
+function openSettings() {
+  $('stTotalReviewed').textContent=store.totalReviewed;
+  $('stTotalCorrect').textContent=store.totalCorrect;
+  $('stBestStreak').textContent=store.bestStreak+' 🔥';
+  $('stDueToday').textContent=getDueCards().length;
+  $('stLevelProgress').innerHTML=['A1','A2','B1','B2','C1','C2'].map(lv=>{
+    const cards=VOCAB.filter(c=>c.lv===lv);
+    const m=cards.filter(c=>isMastered(getCardSR(c.id))).length;
+    const pct=Math.round(m/cards.length*100);
+    return `<span class="badge-${lv}" style="display:inline-block;padding:1px 6px;border-radius:4px;margin:2px">${lv}: ${m}/${cards.length} (${pct}%)</span>`;
+  }).join(' ');
+  $('panelOverlay').classList.add('show');
+}
+function closeSettings(e) {
+  if(!e||e.target===$('panelOverlay')) $('panelOverlay').classList.remove('show');
+}
+function resetData() {
+  if(!confirm('Reset ALL progress? This cannot be undone.')) return;
+  store={cards:{},totalReviewed:0,totalCorrect:0,bestStreak:0};
+  saveStore(); closeSettings(); startSession();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  KEYBOARD + TOUCH
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.key===' '||e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();flipCard();}
+  if(e.key==='ArrowRight'||e.key==='l') answer(true);
+  if(e.key==='ArrowLeft' ||e.key==='j') answer(false);
+  if(e.key==='s') answer(null);
+});
+
+let tx=0,ty=0;
+$('cardScene').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+$('cardScene').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50) answer(dx>0?true:false);
+  else if(Math.abs(dy)>40&&Math.abs(dx)<40) flipCard();
+},{passive:true});
+
+// ─ BOOT ─
+updateLevelCounts();
+startSession();
+</script>
+</body>
+</html>
