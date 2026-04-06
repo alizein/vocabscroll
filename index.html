@@ -454,14 +454,14 @@ function buildQueue() {
 }
 
 function updateLevelCounts() {
-  const byType = t => VOCAB.filter(c => t==='all' || c.type===t);
   $('cnt-all').textContent = VOCAB.length;
   ['A1','A2','B1','B2','C1','C2'].forEach(lv =>
     $('cnt-'+lv).textContent = VOCAB.filter(c=>c.lv===lv).length
   );
-  $('cnt-type-all').textContent = VOCAB.length;
+  const lvPool = levelFilter==='all' ? VOCAB : VOCAB.filter(c=>c.lv===levelFilter);
+  $('cnt-type-all').textContent = lvPool.length;
   ['noun','verb','adj','prep','phrase'].forEach(t =>
-    $('cnt-type-'+t).textContent = VOCAB.filter(c=>c.type===t).length
+    $('cnt-type-'+t).textContent = lvPool.filter(c=>c.type===t).length
   );
 }
 
