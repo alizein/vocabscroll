@@ -58,6 +58,15 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
 .lv-btn[data-lv="C2"]{color:#f07a88}.lv-btn[data-lv="C2"].active{background:#2a1018;border-color:#f07a88}
 .lv-count{font-size:.6rem;opacity:.65;margin-left:2px}
 
+/* TYPE FILTER */
+.type-row{width:100%;max-width:480px;padding:0 20px 8px;display:flex;gap:6px;
+  flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.type-row::-webkit-scrollbar{display:none}
+.type-btn{flex-shrink:0;padding:5px 10px;border-radius:8px;font-family:'DM Mono',monospace;
+  font-size:0.68rem;font-weight:500;cursor:pointer;border:1.5px solid transparent;
+  transition:all .2s;opacity:0.45;background:var(--surface);color:var(--muted)}
+.type-btn.active{opacity:1;border-color:var(--muted);color:var(--text)}
+
 /* MODE ROW */
 .mode-row{width:100%;max-width:480px;padding:0 20px 10px;display:flex;gap:6px;flex-shrink:0}
 .mode-btn{flex:1;padding:7px 4px;background:var(--surface);border:1px solid var(--border);
@@ -245,6 +254,15 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
   <button class="lv-btn"        data-lv="C2"   onclick="setLevel('C2')">C2 <span class="lv-count" id="cnt-C2"></span></button>
 </div>
 
+<div class="type-row">
+  <button class="type-btn active" data-type="all"    onclick="setType('all')">All <span class="lv-count" id="cnt-type-all"></span></button>
+  <button class="type-btn"        data-type="noun"   onclick="setType('noun')">Noun <span class="lv-count" id="cnt-type-noun"></span></button>
+  <button class="type-btn"        data-type="verb"   onclick="setType('verb')">Verb <span class="lv-count" id="cnt-type-verb"></span></button>
+  <button class="type-btn"        data-type="adj"    onclick="setType('adj')">Adj <span class="lv-count" id="cnt-type-adj"></span></button>
+  <button class="type-btn"        data-type="prep"   onclick="setType('prep')">Prep <span class="lv-count" id="cnt-type-prep"></span></button>
+  <button class="type-btn"        data-type="phrase" onclick="setType('phrase')">Phrase <span class="lv-count" id="cnt-type-phrase"></span></button>
+</div>
+
 <div class="mode-row">
   <button class="mode-btn active" onclick="setMode('de-en')">🇩🇪→🇬🇧</button>
   <button class="mode-btn"        onclick="setMode('en-de')">🇬🇧→🇩🇪</button>
@@ -398,7 +416,7 @@ function isMastered(sr) { return sr.reps >= 3 && sr.interval >= 21; }
 //  APP STATE
 // ═══════════════════════════════════════════════════════════════
 const $ = id => document.getElementById(id);
-let mode='de-en', levelFilter='all';
+let mode='de-en', levelFilter='all', typeFilter='all';
 let queue=[], currentIdx=0, isFlipped=false, answered=false;
 let got=0, missed=0, streak=0, sessionBest=0;
 let effectiveCardMode='de-en';
@@ -412,7 +430,12 @@ function shuffle(a) {
   for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
   return b;
 }
-function filteredVocab() { return levelFilter==='all'?VOCAB:VOCAB.filter(c=>c.lv===levelFilter); }
+function filteredVocab() {
+  return VOCAB.filter(c =>
+    (levelFilter==='all' || c.lv===levelFilter) &&
+    (typeFilter==='all'  || c.type===typeFilter)
+  );
+}
 function getDueCards()    { return filteredVocab().filter(c=>isDue(getCardSR(c.id))); }
 
 function buildQueue() {
@@ -431,9 +454,14 @@ function buildQueue() {
 }
 
 function updateLevelCounts() {
+  const byType = t => VOCAB.filter(c => t==='all' || c.type===t);
   $('cnt-all').textContent = VOCAB.length;
   ['A1','A2','B1','B2','C1','C2'].forEach(lv =>
     $('cnt-'+lv).textContent = VOCAB.filter(c=>c.lv===lv).length
+  );
+  $('cnt-type-all').textContent = VOCAB.length;
+  ['noun','verb','adj','prep','phrase'].forEach(t =>
+    $('cnt-type-'+t).textContent = VOCAB.filter(c=>c.type===t).length
   );
 }
 
@@ -476,6 +504,12 @@ function setMode(m) {
 function setLevel(lv) {
   levelFilter=lv;
   document.querySelectorAll('.lv-btn').forEach(b=>b.classList.toggle('active',b.dataset.lv===lv));
+  startSession();
+}
+
+function setType(t) {
+  typeFilter=t;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===t));
   startSession();
 }
 
