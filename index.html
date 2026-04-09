@@ -151,6 +151,15 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
 .tap-hint{position:absolute;bottom:14px;font-family:'DM Mono',monospace;
   font-size:.6rem;color:var(--border);letter-spacing:.06em}
 
+.card-etymology{margin-top:10px;font-family:'DM Mono',monospace;font-size:.65rem;
+  color:var(--muted);text-align:center;line-height:1.5;opacity:.75;min-height:0}
+.etym-loading{opacity:.3;letter-spacing:.2em}
+
+.panel-input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 9px;
+  width:160px;outline:none}
+.panel-input:focus{border-color:var(--muted)}
+
 .card-scene.swipe-right{animation:swipeRight .38s ease forwards}
 .card-scene.swipe-left{animation:swipeLeft .38s ease forwards}
 @keyframes swipeRight{to{transform:translateX(120%) rotate(12deg);opacity:0}}
@@ -298,6 +307,7 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
         <div class="card-hint" id="backHint">ENGLISH</div>
         <div class="card-translation" id="backTranslation">—</div>
         <div class="card-example" id="cardExample"></div>
+        <div class="card-etymology" id="cardEtymology"></div>
       </div>
     </div>
     <div class="feedback" id="feedbackOverlay"></div>
@@ -363,6 +373,14 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
       </div>
       <div class="panel-val" id="stLevelProgress" style="font-size:.7rem;line-height:1.7"></div>
     </div>
+    <div class="panel-row">
+      <div>
+        <div class="panel-label">Anthropic API key</div>
+        <div class="panel-sub">For etymology notes · stored locally</div>
+      </div>
+      <input id="apiKeyInput" class="panel-input" type="password" placeholder="sk-ant-…"
+        oninput="saveApiKey(this.value)">
+    </div>
     <button class="panel-close" onclick="closeSettings()">Close</button>
     <span class="reset-link" onclick="resetData()">Reset all progress</span>
   </div>
@@ -387,6 +405,70 @@ let store = loadStore();
 
 function getCardSR(id) {
   return store.cards[id] || {interval:1,ease:2.5,reps:0,nextDue:0,correct:0,total:0};
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ETYMOLOGY  — Claude API
+// ═══════════════════════════════════════════════════════════════
+const API_KEY_STORE = 'vocabscroll_apikey';
+const etymKey = id => `etym_${id}`;
+
+function getApiKey() { return localStorage.getItem(API_KEY_STORE) || ''; }
+function saveApiKey(v) {
+  v = v.trim();
+  v ? localStorage.setItem(API_KEY_STORE, v) : localStorage.removeItem(API_KEY_STORE);
+}
+
+async function fetchEtymology(card) {
+  const el = $('cardEtymology');
+  const cached = localStorage.getItem(etymKey(card.id));
+
+  // Cache hit — 'null' string means no etymology found
+  if (cached !== null) {
+    el.textContent = cached === 'null' ? '' : '🔗 ' + cached;
+    return;
+  }
+
+  const key = getApiKey();
+  if (!key) { el.textContent = ''; return; }
+
+  el.innerHTML = '<span class="etym-loading">···</span>';
+
+  const prompt =
+    `German word: "${card.de}" (${card.type}, ${card.lv}, "${card.en}")\n` +
+    `If a genuine etymological connection exists between this German word and its English equivalent or any common English word, explain it in 1-2 sentences: shared root, how it shifted, what other words it unlocks. Focus on Proto-Germanic or Indo-European roots and Grimm's Law consonant shifts where relevant. If no real connection exists, return null.\n` +
+    `Reply ONLY as JSON: {"etymology": "..."} or {"etymology": null}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 150,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || '';
+    let etym = null;
+    try { etym = JSON.parse(text)?.etymology ?? null; } catch {}
+
+    localStorage.setItem(etymKey(card.id), etym === null ? 'null' : etym);
+
+    // Only show if this card is still the active one
+    if (queue[currentIdx]?.id === card.id) {
+      el.textContent = etym ? '🔗 ' + etym : '';
+    }
+  } catch {
+    el.textContent = '';
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -532,6 +614,7 @@ function loadCard() {
 
   $('cardScene').className='card-scene';
   $('feedbackOverlay').className='feedback';
+  $('cardEtymology').textContent='';
 
   effectiveCardMode = mode==='random' ? (Math.random()>.5?'de-en':'en-de')
                     : mode==='due'    ? 'de-en'
@@ -583,6 +666,7 @@ function flipCard() {
   if (answered) return;
   isFlipped=!isFlipped;
   $('card3d').classList.toggle('flipped',isFlipped);
+  if (isFlipped) { const card=queue[currentIdx]; if(card) fetchEtymology(card); }
 }
 
 function answer(correct) {
@@ -681,6 +765,7 @@ function openSettings() {
     const pct=Math.round(m/cards.length*100);
     return `<span class="badge-${lv}" style="display:inline-block;padding:1px 6px;border-radius:4px;margin:2px">${lv}: ${m}/${cards.length} (${pct}%)</span>`;
   }).join(' ');
+  $('apiKeyInput').value = getApiKey();
   $('panelOverlay').classList.add('show');
 }
 function closeSettings(e) {
