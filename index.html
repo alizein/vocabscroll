@@ -58,6 +58,15 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
 .lv-btn[data-lv="C2"]{color:#f07a88}.lv-btn[data-lv="C2"].active{background:#2a1018;border-color:#f07a88}
 .lv-count{font-size:.6rem;opacity:.65;margin-left:2px}
 
+/* TYPE FILTER */
+.type-row{width:100%;max-width:480px;padding:0 20px 8px;display:flex;gap:6px;
+  flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.type-row::-webkit-scrollbar{display:none}
+.type-btn{flex-shrink:0;padding:5px 10px;border-radius:8px;font-family:'DM Mono',monospace;
+  font-size:0.68rem;font-weight:500;cursor:pointer;border:1.5px solid transparent;
+  transition:all .2s;opacity:0.45;background:var(--surface);color:var(--muted)}
+.type-btn.active{opacity:1;border-color:var(--muted);color:var(--text)}
+
 /* MODE ROW */
 .mode-row{width:100%;max-width:480px;padding:0 20px 10px;display:flex;gap:6px;flex-shrink:0}
 .mode-btn{flex:1;padding:7px 4px;background:var(--surface);border:1px solid var(--border);
@@ -125,6 +134,13 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
 .sr-badge{position:absolute;bottom:12px;right:14px;font-family:'DM Mono',monospace;
   font-size:.58rem;color:var(--border);letter-spacing:.04em}
 .sr-badge.due{color:#f0a050}
+
+.audio-btn{position:absolute;top:10px;left:14px;
+  background:var(--surface2);border:1px solid var(--border);cursor:pointer;
+  padding:3px 10px;border-radius:8px;color:var(--text);font-size:.8rem;line-height:1.4;
+  transition:border-color .15s,color .15s}
+.audio-btn:hover{border-color:var(--muted)}
+.audio-btn.playing{border-color:var(--accent);color:var(--accent)}
 
 .card-word{font-size:2.2rem;font-weight:300;letter-spacing:-0.02em;text-align:center;line-height:1.1}
 .card-article{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:6px;letter-spacing:.04em}
@@ -238,6 +254,15 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
   <button class="lv-btn"        data-lv="C2"   onclick="setLevel('C2')">C2 <span class="lv-count" id="cnt-C2"></span></button>
 </div>
 
+<div class="type-row">
+  <button class="type-btn active" data-type="all"    onclick="setType('all')">All <span class="lv-count" id="cnt-type-all"></span></button>
+  <button class="type-btn"        data-type="noun"   onclick="setType('noun')">Noun <span class="lv-count" id="cnt-type-noun"></span></button>
+  <button class="type-btn"        data-type="verb"   onclick="setType('verb')">Verb <span class="lv-count" id="cnt-type-verb"></span></button>
+  <button class="type-btn"        data-type="adj"    onclick="setType('adj')">Adj <span class="lv-count" id="cnt-type-adj"></span></button>
+  <button class="type-btn"        data-type="prep"   onclick="setType('prep')">Prep <span class="lv-count" id="cnt-type-prep"></span></button>
+  <button class="type-btn"        data-type="phrase" onclick="setType('phrase')">Phrase <span class="lv-count" id="cnt-type-phrase"></span></button>
+</div>
+
 <div class="mode-row">
   <button class="mode-btn active" onclick="setMode('de-en')">🇩🇪→🇬🇧</button>
   <button class="mode-btn"        onclick="setMode('en-de')">🇬🇧→🇩🇪</button>
@@ -262,6 +287,7 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
       <div class="card-face card-front">
         <div class="card-hint" id="frontHint">GERMAN</div>
         <div class="card-tag"  id="cardTag"></div>
+        <button class="audio-btn" id="audioBtn" onclick="event.stopPropagation();speakCurrent()" title="Play pronunciation">♪</button>
         <div class="card-word" id="frontWord">—</div>
         <div class="card-article" id="cardArticle"></div>
         <div class="card-level-badge" id="frontLvBadge"></div>
@@ -390,7 +416,7 @@ function isMastered(sr) { return sr.reps >= 3 && sr.interval >= 21; }
 //  APP STATE
 // ═══════════════════════════════════════════════════════════════
 const $ = id => document.getElementById(id);
-let mode='de-en', levelFilter='all';
+let mode='de-en', levelFilter='all', typeFilter='all';
 let queue=[], currentIdx=0, isFlipped=false, answered=false;
 let got=0, missed=0, streak=0, sessionBest=0;
 let effectiveCardMode='de-en';
@@ -404,7 +430,12 @@ function shuffle(a) {
   for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
   return b;
 }
-function filteredVocab() { return levelFilter==='all'?VOCAB:VOCAB.filter(c=>c.lv===levelFilter); }
+function filteredVocab() {
+  return VOCAB.filter(c =>
+    (levelFilter==='all' || c.lv===levelFilter) &&
+    (typeFilter==='all'  || c.type===typeFilter)
+  );
+}
 function getDueCards()    { return filteredVocab().filter(c=>isDue(getCardSR(c.id))); }
 
 function buildQueue() {
@@ -426,6 +457,11 @@ function updateLevelCounts() {
   $('cnt-all').textContent = VOCAB.length;
   ['A1','A2','B1','B2','C1','C2'].forEach(lv =>
     $('cnt-'+lv).textContent = VOCAB.filter(c=>c.lv===lv).length
+  );
+  const lvPool = levelFilter==='all' ? VOCAB : VOCAB.filter(c=>c.lv===levelFilter);
+  $('cnt-type-all').textContent = lvPool.length;
+  ['noun','verb','adj','prep','phrase'].forEach(t =>
+    $('cnt-type-'+t).textContent = lvPool.filter(c=>c.type===t).length
   );
 }
 
@@ -471,10 +507,17 @@ function setLevel(lv) {
   startSession();
 }
 
+function setType(t) {
+  typeFilter=t;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===t));
+  startSession();
+}
+
 // ═══════════════════════════════════════════════════════════════
 //  CARD LOGIC
 // ═══════════════════════════════════════════════════════════════
 function loadCard() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (currentIdx>=queue.length) { showDone(); return; }
   const card=queue[currentIdx];
   isFlipped=false; answered=false;
@@ -519,6 +562,21 @@ function loadCard() {
   }
   $('cardExample').innerHTML=card.example||'';
   updateStats();
+}
+
+function speakCurrent() {
+  const card = queue[currentIdx];
+  if (!card) return;
+  const text = effectiveCardMode === 'de-en' ? (card.base || card.de) : card.en;
+  const lang  = effectiveCardMode === 'de-en' ? 'de-DE' : 'en-US';
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang;
+  const btn = $('audioBtn');
+  btn.classList.add('playing');
+  utt.onend = utt.onerror = () => btn.classList.remove('playing');
+  window.speechSynthesis.speak(utt);
 }
 
 function flipCard() {
