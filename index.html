@@ -151,9 +151,16 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
 .tap-hint{position:absolute;bottom:14px;font-family:'DM Mono',monospace;
   font-size:.6rem;color:var(--border);letter-spacing:.06em}
 
-.card-etymology{margin-top:10px;font-family:'DM Mono',monospace;font-size:.65rem;
-  color:var(--muted);text-align:center;line-height:1.5;opacity:.75;min-height:0}
+.card-etymology{margin-top:8px;font-family:'DM Mono',monospace;font-size:.63rem;
+  color:var(--muted);text-align:center;line-height:1.5;opacity:.75;
+  max-height:80px;overflow-y:auto;display:none}
+.card-etymology.show{display:block}
 .etym-loading{opacity:.3;letter-spacing:.2em}
+.etym-btn{margin-top:10px;background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 10px;
+  cursor:pointer;transition:border-color .15s,color .15s;display:none}
+.etym-btn.show{display:inline-block}
+.etym-btn:hover{border-color:var(--muted);color:var(--text)}
 
 .panel-input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
   color:var(--text);font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 9px;
@@ -307,6 +314,7 @@ body{background:var(--bg);color:var(--text);font-family:'Fraunces',Georgia,serif
         <div class="card-hint" id="backHint">ENGLISH</div>
         <div class="card-translation" id="backTranslation">—</div>
         <div class="card-example" id="cardExample"></div>
+        <button class="etym-btn" id="etymBtn" onclick="event.stopPropagation();revealEtymology()">🔗 etymology</button>
         <div class="card-etymology" id="cardEtymology"></div>
       </div>
     </div>
@@ -614,6 +622,8 @@ function loadCard() {
 
   $('cardScene').className='card-scene';
   $('feedbackOverlay').className='feedback';
+  $('etymBtn').classList.remove('show');
+  $('cardEtymology').classList.remove('show');
   $('cardEtymology').textContent='';
 
   effectiveCardMode = mode==='random' ? (Math.random()>.5?'de-en':'en-de')
@@ -666,7 +676,15 @@ function flipCard() {
   if (answered) return;
   isFlipped=!isFlipped;
   $('card3d').classList.toggle('flipped',isFlipped);
-  if (isFlipped) { const card=queue[currentIdx]; if(card) fetchEtymology(card); }
+  if (isFlipped && getApiKey()) $('etymBtn').classList.add('show');
+}
+
+function revealEtymology() {
+  const card=queue[currentIdx];
+  if (!card) return;
+  $('etymBtn').classList.remove('show');
+  $('cardEtymology').classList.add('show');
+  fetchEtymology(card);
 }
 
 function answer(correct) {
